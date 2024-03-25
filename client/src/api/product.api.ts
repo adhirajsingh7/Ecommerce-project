@@ -1,9 +1,16 @@
 import axios from "axios";
 
 export const fetchProducts = async (options: any) => {
-  const { page = 1, limit = 2 } = options;
+  const {
+    page = 1,
+    rowsPerPage: limit = 5,
+    debouncedSearch: name = "",
+  } = options || {};
+  
   try {
-    const { data } = await axios.get(`/products?page=${page}&limit=${limit}`);
+    const { data } = await axios.get(
+      `/products?page=${page}&limit=${limit}&name=${name}`
+    );
     return data;
   } catch (error) {
     console.log(error);

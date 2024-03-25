@@ -11,7 +11,7 @@ import { createProduct, updateProduct } from "../../api/product.api";
 const ProductFormComponent = (props: any) => {
   const { title, product, closeModal } = props;
   const queryClient = useQueryClient();
-  console.log(product);
+  // console.log(product);
 
   const {
     isPending,
@@ -44,7 +44,7 @@ const ProductFormComponent = (props: any) => {
   };
 
   useEffect(() => {
-    console.log("Reset");
+    // console.log("Reset");
     reset(product);
   }, [product]);
 
@@ -57,7 +57,7 @@ const ProductFormComponent = (props: any) => {
     formState: { errors, isSubmitting },
   } = useForm<TProductSchema>({
     defaultValues: useMemo(() => {
-      console.log("Product has changed");
+      // console.log("Product has changed");
       return product ? product : defaultValues;
     }, [props]),
     resolver: zodResolver(productSchema),
