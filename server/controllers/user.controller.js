@@ -70,9 +70,9 @@ exports.delete_user = async (req, res, next) => {
 
 // signup user
 exports.signup_user = async (req, res, next) => {
-  const { username = "", email = "", password = "", full_name = "" } = req.body;
-  // console.log(req.body);
-  // console.log(req.files);
+  const { username = "", email = "", password = "", full_name = "", mobile = 0, role = "user" } = req.body;
+  console.log(req.body);
+  console.log(req.files);
   // console.log(req.files.avatar[0]);
   // return res.status(200).send("hey");
   const user_exists = await User.findOne({ email });
@@ -96,6 +96,8 @@ exports.signup_user = async (req, res, next) => {
     email,
     password,
     full_name,
+    mobile,
+    role,
     avatar: avatar?.url || "",
   });
   return res.status(201).json(user);
@@ -104,13 +106,20 @@ exports.signup_user = async (req, res, next) => {
 exports.login_user = async (req, res, next) => {
   const { email = "", password = "" } = req.body;
 
-  const user_exists = await User.findOne({ email });
-  if (!user_exists)
-    return res.status(404).json({ message: "User does not exists" });
+  try {
+    const user_exists = await User.findOne({ email });
+    if (!user_exists)
+      return res.status(404).json({ message: "User does not exists" });
 
-  const is_password_valid = await User.is_password_correct(password);
-  if (!is_password_valid)
-    return res.status(401).json({ message: "Password is incorrect" });
+    const is_password_valid = await user_exists.is_password_correct(password);
+    if (!is_password_valid)
+      return res.status(401).json({ message: "Password is incorrect" });
 
-  return res.status(200).json({ message: "Logged in successfully" });
+    return res
+      .status(200)
+      .json({ user: user_exists, message: "Logged in successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: error.message });
+  }
 };

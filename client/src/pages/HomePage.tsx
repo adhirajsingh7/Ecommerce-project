@@ -15,14 +15,15 @@ import { fetchProducts } from "../api/product.api";
 import useDebounce from "../hooks/useDebounce";
 import SearchIcon from "@mui/icons-material/Search";
 
+
 const HomePage = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 500);
 
-  console.log(debouncedSearch);
-
+  // console.log(debouncedSearch);
+  
   const {
     isPending,
     isError,
@@ -35,7 +36,8 @@ const HomePage = () => {
     placeholderData: keepPreviousData,
     staleTime: 5000,
   });
-
+  
+  console.log(usersList)
   // console.log(usersList);
   if (isPending) {
     return <span>Loading...</span>;
@@ -63,12 +65,13 @@ const HomePage = () => {
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) {
     setSearch(event.target.value);
+    setPage(0);
   }
 
   return (
     <Box sx={{ height: "100vh", width: 1 }}>
       <Stack direction="row" justifyContent="center" sx={{ p: 2, width: 1 }}>
-        <ProductFormComponent />
+        <ProductFormComponent setSearch={setSearch} setPage={setPage} />
       </Stack>
       <Stack direction="row" justifyContent="center" sx={{ p: 2 }}>
         <TextField
@@ -96,7 +99,7 @@ const HomePage = () => {
         ))}
       </Stack>
       <Stack direction="row" justifyContent="center">
-        <TablePagination
+        {usersList?.data?.length !== 0  ? <TablePagination
           component="div"
           rowsPerPageOptions={[5, 10, 25, 50, 100]}
           count={usersList.total}
@@ -105,6 +108,10 @@ const HomePage = () => {
           rowsPerPage={rowsPerPage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
+        :
+        <Typography sx={{p: 2}} variant="h4" textAlign="center">No Products found</Typography>
+      }
+      {/* {usersList  ?.data?.length === 0 && <Typography sx={{p: 2}} variant="h4" textAlign="center">No Products found</Typography>} */}
       </Stack>
     </Box>
   );

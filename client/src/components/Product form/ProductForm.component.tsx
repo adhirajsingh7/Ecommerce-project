@@ -9,7 +9,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createProduct, updateProduct } from "../../api/product.api";
 
 const ProductFormComponent = (props: any) => {
-  const { title, product, closeModal } = props;
+  const { title, product, closeModal, setSearch, setPage } = props;
   const queryClient = useQueryClient();
   // console.log(product);
 
@@ -70,13 +70,14 @@ const ProductFormComponent = (props: any) => {
     } else {
       createProductMutation(data);
     }
-
+    setSearch("");
+    setPage(0);
     reset();
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
       <Stack direction="column" gap={2} sx={{ width: "400px" }}>
-        <Typography variant="h4">Create Product</Typography>
+        <Typography variant="h4">{product ? "Update Product" :"Create Product"}</Typography>
         <FormInputText
           type="text"
           name={"name"}

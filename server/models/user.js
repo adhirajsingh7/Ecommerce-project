@@ -22,12 +22,19 @@ const user_schema = new Schema(
     avatar: {
       type: String,
     },
-    cart_items: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Product",
-      },
-    ],
+    mobile: {
+      type: String
+    },
+    role: {
+      type: String,
+      enum: ["admin", "user", "merchant"],
+      default: "user",
+    },
+    status: {
+      type: String,
+      enum: ["active", "inactive"],
+      default: "active",
+    },
   },
   {
     timestamps: {
