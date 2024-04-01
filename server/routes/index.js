@@ -9,7 +9,7 @@ router.use("/products", require("./product.routes"));
 router.use("/cart", require("./cart.routes"));
 router.use("/reviews", require("./review.routes"));
 router.use("/orders", require("./order.routes"));
-router.use("/address", require("./address.routes"));
+router.use("/addresses", require("./address.routes"));
 
 
 module.exports = router;

@@ -1,15 +1,15 @@
 const router = require("express").Router();
-const { product_controller } = require("../controllers");
+const { order_controller } = require("../controllers");
 
 router
   .route("/")
-  .get(product_controller.get_products)
-  .post(product_controller.create_product);
+  .get(order_controller.get_orders)
+  .post(order_controller.create_order);
 
 router
-  .route("/:product_id")
-  .get(product_controller.get_product_by_id)
-  .put(product_controller.update_product)
-  .delete(product_controller.delete_product);
+  .route("/:order_id")
+  .get(order_controller.get_order_by_id)
+  .put(order_controller.update_order)
+  .delete(order_controller.delete_order);
 
 module.exports = router;

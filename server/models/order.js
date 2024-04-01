@@ -16,10 +16,13 @@ const order_schema = new Schema({
     ref: "Address",
     required: true,
   },
+  total_amount: {
+    type: Number,
+  },
   status: {
     type: String,
     enum: ["not_processed", "processing", "shipped", "delivered", "cancelled"],
-    default: "active",
+    default: "not_processed",
   },
 });
 

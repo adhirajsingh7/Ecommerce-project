@@ -1,19 +1,18 @@
 const { Review } = require("../models/review");
 
 exports.get_reviews = async (req, res, next) => {
-  let { page = 0, limit = 10, name = "" } = req.query;
+  let { page = 0, limit = 10, product_id = "" } = req.query;
   page = parseInt(page) || 0;
   limit = parseInt(limit) || 10;
 
   let offset = page * limit;
+  let criteria = {};
+  if (product_id) criteria.product_id = product_id;
 
   try {
-    const response = await Review.find()
-      .limit(limit * 1)
-      .skip(offset)
-      .exec();
+    const response = await Review.find(criteria, {}, { skip: offset, limit });
 
-    const count = await Review.find().countDocuments();
+    const count = await Review.find(criteria).countDocuments();
 
     return res.status(200).send({
       total: count,
@@ -41,10 +40,11 @@ exports.get_review_by_id = async (req, res, next) => {
 };
 
 exports.create_review = async (req, res, next) => {
+  const { user_id, product_id } = req.params;
   const review = req.body;
-
+  
   try {
-    const response = await Review.create(review);
+    const response = await Review.create({ user_id, product_id, ...review });
     return res.status(201).json(response);
   } catch (error) {
     console.log(error);
@@ -54,10 +54,10 @@ exports.create_review = async (req, res, next) => {
 
 exports.update_review = async (req, res, next) => {
   const { review_id } = req.params;
-  const Review = req.body;
+  const review = req.body;
 
   try {
-    const response = await Review.findOneAndUpdate({ _id: review_id }, Review);
+    const response = await Review.findOneAndUpdate({ _id: review_id }, review);
     res.status(200).json({ message: "Review updated successfully." });
   } catch (error) {
     console.log(error);
@@ -67,7 +67,7 @@ exports.update_review = async (req, res, next) => {
 
 exports.delete_review = async (req, res, next) => {
   const { review_id } = req.params;
-  
+
   try {
     const response = await Review.findOneAndDelete({ _id: review_id });
     return res.status(200).json({ message: "Review deleted successfully." });

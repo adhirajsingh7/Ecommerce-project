@@ -1,3 +1,4 @@
+const { Cart } = require("../models/cart");
 const { User } = require("../models/user");
 const {
   upload_on_cloudinary,
@@ -6,7 +7,7 @@ const {
 
 exports.get_users = async (req, res, next) => {
   try {
-    const response = await User.find({}).populate("cart_items");
+    const response = await User.find({});
     res.status(200).send(response);
   } catch (error) {
     console.log(error);
@@ -100,6 +101,9 @@ exports.signup_user = async (req, res, next) => {
     role,
     avatar: avatar?.url || "",
   });
+
+  const user_cart = await Cart.create({user_id: user._id});
+
   return res.status(201).json(user);
 };
 

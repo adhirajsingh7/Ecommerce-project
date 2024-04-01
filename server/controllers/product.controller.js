@@ -1,5 +1,5 @@
 const { Product } = require("../models/product");
-const { delete_on_cloudinary } = require("../utils/cloudinary");
+const { delete_on_cloudinary, upload_on_cloudinary } = require("../utils/cloudinary");
 
 exports.get_products = async (req, res, next) => {
   let { page = 0, limit = 10, name = "" } = req.query;

@@ -1,35 +1,63 @@
-const { User } = require("../models/user");
+const { Cart } = require("../models/cart");
 
-exports.add_products = async (req, res, next) => {
+exports.get_all_carts = async (req, res, next) => {
+  const { user_id } = req.query;
   try {
-    const { user_id } = req.params;
-    const { products } = req.body;
-    const user = await User.findOne({ _id: user_id });
-    if (!user) return res.status(404).json({ message: "User not found" });
+    let criteria = {};
+    if (user_id) criteria.user_id = user_id;
 
-    user.cart_items = products;
-
-    await user.save();
-
-    res.status(200).send(user);
+    const response = await Cart.find(criteria);
+    res.status(200).send(response);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: error.message });
   }
 };
 
-exports.remove_products = async (req, res, next) => {
+exports.add_product = async (req, res, next) => {
+  const { cart_id } = req.params;
+  const product = req.body;
   try {
-    const { user_id } = req.params;
-    const { products } = req.body;
-    const user = await User.findOne({ _id: user_id });
-    if (!user) return res.status(404).json({ message: "User not found" });
+    const cart = await Cart.findOne({ _id: cart_id });
+    cart.products.push(product);
+    await cart.save();
+    return res.status(200).json(cart);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: error.message });
+  }
+};
 
-    user.cart_items = products;
+exports.edit_cart = async (req, res, next) => {
+  const { cart_id } = req.params;
+  const updated_product = req.body;
+  try {
+    const cart = await Cart.findOne({ _id: cart_id });
+    const index = cart.products.findIndex(
+      (product_obj) =>
+        product_obj.product.toString() === updated_product.product.toString()
+    );
+    if (index !== -1) {
+      cart.products[index] = updated_product;
+      if (cart.products[index].quantity === 0) {
+        cart.products.splice(index, 1);
+      }
+    }
+    await cart.save();
+    return res.status(200).json(cart);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: error.message });
+  }
+};
 
-    await user.save();
-
-    res.status(200).send("add products");
+exports.empty_cart = async (req, res, next) => {
+  const { cart_id } = req.params;
+  try {
+    const cart = await Cart.findOne({ _id: cart_id });
+    cart.products = [];
+    await cart.save();
+    return res.status(200).json(cart);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: error.message });

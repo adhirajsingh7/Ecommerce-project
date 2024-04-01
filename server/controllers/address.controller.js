@@ -1,19 +1,21 @@
 const { Address } = require("../models/address");
 
 exports.get_addresses = async (req, res, next) => {
-  let { page = 0, limit = 10, name = "" } = req.query;
+  let { page = 0, limit = 10, user_id = "" } = req.query;
   page = parseInt(page) || 0;
   limit = parseInt(limit) || 10;
 
   let offset = page * limit;
+  let criteria = {};
+  if (user_id) criteria.user_id = user_id;
 
   try {
-    const response = await Address.find()
+    const response = await Address.find(criteria)
       .limit(limit * 1)
       .skip(offset)
       .exec();
 
-    const count = await Address.find().countDocuments();
+    const count = await Address.find(criteria).countDocuments();
 
     return res.status(200).send({
       total: count,
@@ -28,10 +30,10 @@ exports.get_addresses = async (req, res, next) => {
 };
 
 exports.get_address_by_id = async (req, res, next) => {
-  const { Address_id } = req.params;
+  const { address_id } = req.params;
 
   try {
-    const response = await Address.findOne({ _id: Address_id });
+    const response = await Address.findOne({ _id: address_id });
     if (!response) throw new Error("Address not found.");
     return res.status(200).send(response);
   } catch (error) {
@@ -41,10 +43,11 @@ exports.get_address_by_id = async (req, res, next) => {
 };
 
 exports.create_address = async (req, res, next) => {
+  const { user_id } = req.params;
   const address = req.body;
 
   try {
-    const response = await Address.create(address);
+    const response = await Address.create({ user_id, ...address });
     return res.status(201).json(response);
   } catch (error) {
     console.log(error);
@@ -57,7 +60,10 @@ exports.update_address = async (req, res, next) => {
   const address = req.body;
 
   try {
-    const response = await Address.findOneAndUpdate({ _id: address_id }, address);
+    const response = await Address.findOneAndUpdate(
+      { _id: address_id },
+      address
+    );
     res.status(200).json({ message: "Address updated successfully." });
   } catch (error) {
     console.log(error);
@@ -67,7 +73,7 @@ exports.update_address = async (req, res, next) => {
 
 exports.delete_address = async (req, res, next) => {
   const { address_id } = req.params;
-  
+
   try {
     const response = await Address.findOneAndDelete({ _id: address_id });
     return res.status(200).json({ message: "Address deleted successfully." });
