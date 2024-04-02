@@ -1,5 +1,12 @@
 import React from "react";
-import { Box, IconButton, Paper, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  IconButton,
+  Paper,
+  Stack,
+  Typography,
+} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -22,8 +29,6 @@ const ProductCardComponent = (product: IProduct) => {
     navigate(`/product/${id}`);
   };
 
-  const handleEdit = () => {};
-
   const handleDelete = (productId: string) => {
     mutate(productId);
   };
@@ -42,16 +47,19 @@ const ProductCardComponent = (product: IProduct) => {
       </Typography>
       <Typography variant="body1">Price - {product.price}</Typography>
       <Stack direction="row" justifyContent="flex-end">
-        <IconButton onClick={() => handleView(product?._id)}>
-          <VisibilityIcon />
-        </IconButton>
-        {/* <IconButton onClick={handleEdit}>
-          <EditIcon />
-        </IconButton> */}
-        <UpdateProductComponent {...product} />
-        <IconButton onClick={() => handleDelete(product?._id)}>
-          <DeleteIcon />
-        </IconButton>
+        {isPending ? (
+          <CircularProgress color="inherit" size={24} />
+        ) : (
+          <>
+            <IconButton onClick={() => handleView(product?._id)}>
+              <VisibilityIcon />
+            </IconButton>
+            <UpdateProductComponent {...product} />
+            <IconButton onClick={() => handleDelete(product?._id)}>
+              <DeleteIcon />
+            </IconButton>
+          </>
+        )}
       </Stack>
     </Stack>
   );

@@ -15,7 +15,6 @@ import { fetchProducts } from "../api/product.api";
 import useDebounce from "../hooks/useDebounce";
 import SearchIcon from "@mui/icons-material/Search";
 
-
 const HomePage = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -23,7 +22,7 @@ const HomePage = () => {
   const debouncedSearch = useDebounce(search, 500);
 
   // console.log(debouncedSearch);
-  
+
   const {
     isPending,
     isError,
@@ -36,8 +35,7 @@ const HomePage = () => {
     placeholderData: keepPreviousData,
     staleTime: 5000,
   });
-  
-  console.log(usersList)
+
   // console.log(usersList);
   if (isPending) {
     return <span>Loading...</span>;
@@ -99,19 +97,22 @@ const HomePage = () => {
         ))}
       </Stack>
       <Stack direction="row" justifyContent="center">
-        {usersList?.data?.length !== 0  ? <TablePagination
-          component="div"
-          rowsPerPageOptions={[5, 10, 25, 50, 100]}
-          count={usersList.total}
-          page={page}
-          onPageChange={handleChangePage}
-          rowsPerPage={rowsPerPage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-        :
-        <Typography sx={{p: 2}} variant="h4" textAlign="center">No Products found</Typography>
-      }
-      {/* {usersList  ?.data?.length === 0 && <Typography sx={{p: 2}} variant="h4" textAlign="center">No Products found</Typography>} */}
+        {usersList?.data?.length !== 0 ? (
+          <TablePagination
+            component="div"
+            rowsPerPageOptions={[5, 10, 25, 50, 100]}
+            count={usersList.total}
+            page={page}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        ) : (
+          <Typography sx={{ p: 2 }} variant="h4" textAlign="center">
+            No Products found
+          </Typography>
+        )}
+        {/* {usersList  ?.data?.length === 0 && <Typography sx={{p: 2}} variant="h4" textAlign="center">No Products found</Typography>} */}
       </Stack>
     </Box>
   );

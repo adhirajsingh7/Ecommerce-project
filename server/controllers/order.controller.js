@@ -47,6 +47,12 @@ exports.create_order = async (req, res, next) => {
       destination: address_id,
       total_amount: total_amount,
     });
+
+    // clear cart
+    const cart = await Cart.findOne({ _id: cart_id });
+    cart.products = [];
+    await cart.save();
+
     return res.status(201).send(response);
   } catch (error) {
     console.log(error);
@@ -54,6 +60,26 @@ exports.create_order = async (req, res, next) => {
   }
 };
 
-exports.update_order = async (req, res, next) => {};
+exports.update_order = async (req, res, next) => {
+  const { order_id } = req.params;
+  const { status } = req.body;
+  try {
+    const opts = { runValidators: true };
+    const response = await Order.findOneAndUpdate(
+      { _id: order_id },
+      { status }
+    );
+    res.status(200).json({ message: "Order updated successfully." });
+  } catch (error) {}
+};
 
-exports.delete_order = async (req, res, next) => {};
+exports.delete_order = async (req, res, next) => {
+  const { order_id } = req.params;
+  try {
+    const response = await Order.findOneAndDelete({ _id: order_id });
+    return res.status(200).json({ message: "Order deleted Successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: error.message });
+  }
+};

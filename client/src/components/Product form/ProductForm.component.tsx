@@ -7,6 +7,8 @@ import { TProductSchema, productSchema } from "../../lib/type";
 import { LoadingButton } from "@mui/lab";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createProduct, updateProduct } from "../../api/product.api";
+import { category_options } from "../../lib/constants";
+import { FormInputDropdown } from "../Form components/FormInputDropdown";
 
 const ProductFormComponent = (props: any) => {
   const { title, product, closeModal, setSearch, setPage } = props;
@@ -37,10 +39,13 @@ const ProductFormComponent = (props: any) => {
     },
   });
 
-  let defaultValues = {
+  const defaultValues = {
     name: "",
     description: "",
     price: "",
+    stock: "",
+    category: "",
+    image: "",
   };
 
   useEffect(() => {
@@ -72,12 +77,18 @@ const ProductFormComponent = (props: any) => {
     }
     setSearch("");
     setPage(0);
-    reset();
+    // reset();
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
       <Stack direction="column" gap={2} sx={{ width: "400px" }}>
-        <Typography variant="h4">{product ? "Update Product" :"Create Product"}</Typography>
+        <Typography variant="h4">
+          {product ? "Edit Product" : "Create Product"}
+        </Typography>
+        <Stack direction="row" gap={2}>
+          <Typography variant="body1">Product Image</Typography>
+          <input type="file" {...register("image")} />
+        </Stack>
         <FormInputText
           type="text"
           name={"name"}
@@ -96,9 +107,22 @@ const ProductFormComponent = (props: any) => {
           control={control}
           label={"Price"}
         />
+        <FormInputText
+          type="number"
+          name={"stock"}
+          control={control}
+          label={"Stock"}
+        />
+        <FormInputDropdown
+          name="category"
+          control={control}
+          label="Category"
+          options={category_options}
+          error={errors.category}
+        />
         <LoadingButton
           type="submit"
-          loading={isSubmitting}
+          loading={isPending}
           loadingPosition="center"
           variant="contained"
         >

@@ -6,7 +6,7 @@ export const fetchProducts = async (options: any) => {
     rowsPerPage: limit = 5,
     debouncedSearch: name = "",
   } = options || {};
-  
+
   try {
     const { data } = await axios.get(
       `/products?page=${page}&limit=${limit}&name=${name}`
@@ -27,8 +27,16 @@ export const fetchProductById = async (productId: string) => {
 };
 
 export const createProduct = async (product: any) => {
+  const formData = new FormData();
+  formData.append("name", product.name);
+  formData.append("description", product.description);
+  formData.append("price", product.price);
+  formData.append("stock", product.stock);
+  formData.append("category", product.category);
+  formData.append("image", product.image[0] || "");
+
   try {
-    const { data } = await axios.post("/products", product);
+    const { data } = await axios.post("/products", formData);
     return data;
   } catch (error) {
     console.log(error);

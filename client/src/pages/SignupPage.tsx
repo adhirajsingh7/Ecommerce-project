@@ -1,21 +1,38 @@
 import { Box, Stack, Typography } from "@mui/material";
-import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
+import FormInputText from "../components/Form components/FormInputText";
+import { FormInputRadio } from "../components/Form components/FormInputRadio";
+import { role_options } from "../lib/constants";
 import { TSignUpSchema, signUpSchema } from "../lib/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import LoadingButton from "@mui/lab/LoadingButton";
-import FormInputText from "../components/Form components/FormInputText";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createUser } from "../api/user.api";
 
 const SignupPage = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  const { isPending, isError, error, mutate } = useMutation({
+    mutationFn: (user) => createUser(user),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+  });
+
+  if (isError) {
+    console.log(error.message);
+  }
 
   const defaultValues = {
     username: "",
     email: "",
     password: "",
     full_name: "",
+    mobile: "",
+    role: "",
     avatar: "",
   };
 
@@ -31,27 +48,8 @@ const SignupPage = () => {
   });
 
   const onSubmit: SubmitHandler<any> = async (data) => {
-    // console.log(data);
-
-    const formData = new FormData();
-    formData.append("username", data.username);
-    formData.append("email", data.email);
-    formData.append("password", data.password);
-    formData.append("full_name", data.full_name);
-    formData.append("avatar", data.avatar[0] || "");
-    // console.log("formData", formData);
-    // formdata is array of array
-
-    // for (let data of formData) {
-    //   console.log(data);
-    // }
-
-    try {
-      const response = await axios.post("/users/signup", formData);
-      console.log(response);
-    } catch (error) {
-      console.log("error:", error);
-    }
+    console.log(data);
+    mutate(data);
   };
 
   const [image, setImage] = useState<string | null>(null);
@@ -140,14 +138,28 @@ const SignupPage = () => {
               control={control}
               label={"Full name"}
             />
+            <FormInputText
+              type="text"
+              name={"mobile"}
+              control={control}
+              label={"Mobile"}
+            />
+            <FormInputRadio
+              name={"role"}
+              control={control}
+              label={"Role"}
+              options={role_options}
+              error={errors.role}
+            />
             <LoadingButton
               type="submit"
-              loading={isSubmitting}
+              loading={isPending}
               loadingPosition="center"
               variant="contained"
             >
               <span>Signup</span>
             </LoadingButton>
+            <Link to="/login">Already have an account? Log in here</Link>
           </Stack>
         </form>
       </Box>

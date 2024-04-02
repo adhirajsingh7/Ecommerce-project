@@ -11,9 +11,19 @@ interface IUserProfile {
 
 interface IProduct {
   _id?: string;
+  image: string;
   name: string;
   description: string;
   price: number;
+  stock: number;
+  category: string;
+}
+
+interface IReview {
+  _id?: string;
+  title: string;
+  content: string;
+  rating: number;
 }
 
 interface FormInputProps {
