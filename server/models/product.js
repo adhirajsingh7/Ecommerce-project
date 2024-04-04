@@ -6,9 +6,9 @@ const product_schema = new Schema(
       type: String,
       required: true,
     },
-    // image: {
-    //   type: String,
-    // },
+    image: {
+      type: String,
+    },
     description: {
       type: String,
       required: true,
@@ -17,10 +17,13 @@ const product_schema = new Schema(
       type: Number,
       required: true,
     },
-    // stock: {
-    //   type: Number,
-    //   default: 1,
-    // },
+    stock: {
+      type: Number,
+      default: 1,
+    },
+    category: {
+      type: String,
+    }
   },
   {
     timestamps: {

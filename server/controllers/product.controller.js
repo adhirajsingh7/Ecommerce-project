@@ -1,9 +1,10 @@
 const { Product } = require("../models/product");
+const { delete_on_cloudinary, upload_on_cloudinary } = require("../utils/cloudinary");
 
 exports.get_products = async (req, res, next) => {
   let { page = 0, limit = 10, name = "" } = req.query;
-  page = parseInt(page);
-  limit = parseInt(limit);
+  page = parseInt(page) || 0;
+  limit = parseInt(limit) || 10;
 
   let offset = page * limit;
   let criteria = {};
@@ -13,7 +14,7 @@ exports.get_products = async (req, res, next) => {
       .limit(limit * 1)
       .skip(offset)
       .exec();
-    const count = await Product.find({}).countDocuments();
+    const count = await Product.find(criteria).countDocuments();
 
     res.status(200).send({
       total: count,
@@ -40,10 +41,35 @@ exports.get_product_by_id = async (req, res, next) => {
 };
 
 exports.create_product = async (req, res, next) => {
-  const product = req.body;
+  const {
+    name = "",
+    description = "",
+    price = 0,
+    stock = 0,
+    category = "",
+  } = req.body;
+
+  let image_local_path;
+  if (
+    req.files &&
+    Array.isArray(req.files.image) &&
+    req.files.image.length > 0
+  ) {
+    image_local_path = req.files.image[0].path;
+  }
+
   try {
-    const response = await Product.create(product);
-    res.status(201).send(response);
+    const image = await upload_on_cloudinary(image_local_path);
+
+    const product = await Product.create({
+      name,
+      description,
+      price,
+      stock,
+      category,
+      image: image?.url || "",
+    });
+    return res.status(201).json(product);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: error.message });
@@ -68,8 +94,17 @@ exports.update_product = async (req, res, next) => {
 exports.delete_product = async (req, res, next) => {
   const { product_id } = req.params;
   try {
+
+    const product = await Product.findById(product_id);
+    if (!product) return res.status(404).json({ message: "Product not found" });
+
+    // delete image on cloudinary
+    const { image } = product;
+    const image_public_id = image.split("/").pop().split(".")[0];
+    await delete_on_cloudinary(image_public_id);
+
     const response = await Product.findOneAndDelete({ _id: product_id });
-    res.status(200).json({ message: "Product deleted successfully." });
+    return res.status(200).json({ message: "Product deleted successfully." });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: error.message });

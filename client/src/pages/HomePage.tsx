@@ -21,13 +21,13 @@ const HomePage = () => {
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 500);
 
-  console.log(debouncedSearch);
+  // console.log(debouncedSearch);
 
   const {
     isPending,
     isError,
     error,
-    data: usersList,
+    data: productsList,
     isPlaceholderData,
   } = useQuery({
     queryKey: ["products", { page, rowsPerPage, debouncedSearch }],
@@ -36,7 +36,7 @@ const HomePage = () => {
     staleTime: 5000,
   });
 
-  // console.log(usersList);
+  // console.log(productsList);
   if (isPending) {
     return <span>Loading...</span>;
   }
@@ -63,12 +63,13 @@ const HomePage = () => {
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) {
     setSearch(event.target.value);
+    setPage(0);
   }
 
   return (
-    <Box sx={{ height: "100vh", width: 1 }}>
+    <Box sx={{ height: "calc(100vh - 64px)", width: 1 }}>
       <Stack direction="row" justifyContent="center" sx={{ p: 2, width: 1 }}>
-        <ProductFormComponent />
+        <ProductFormComponent setSearch={setSearch} setPage={setPage} />
       </Stack>
       <Stack direction="row" justifyContent="center" sx={{ p: 2 }}>
         <TextField
@@ -91,20 +92,26 @@ const HomePage = () => {
         sx={{ mt: 4, p: 2, width: 1 }}
         gap={3}
       >
-        {usersList?.data?.map((product: IProduct, index) => (
+        {productsList?.data?.map((product: IProduct, index) => (
           <ProductCardComponent key={index} {...product} />
         ))}
       </Stack>
       <Stack direction="row" justifyContent="center">
-        <TablePagination
-          component="div"
-          rowsPerPageOptions={[5, 10, 25, 50, 100]}
-          count={usersList.total}
-          page={page}
-          onPageChange={handleChangePage}
-          rowsPerPage={rowsPerPage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+        {productsList?.data?.length !== 0 ? (
+          <TablePagination
+            component="div"
+            rowsPerPageOptions={[5, 10, 25, 50, 100]}
+            count={productsList.total}
+            page={page}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        ) : (
+          <Typography sx={{ p: 2 }} variant="h4" textAlign="center">
+            No Products found
+          </Typography>
+        )}
       </Stack>
     </Box>
   );
