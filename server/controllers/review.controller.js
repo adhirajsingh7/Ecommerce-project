@@ -10,15 +10,16 @@ exports.get_reviews = async (req, res, next) => {
   if (product_id) criteria.product_id = product_id;
 
   try {
-    const response = await Review.find(criteria, {}, { skip: offset, limit });
+    const response = await Review.find(criteria, {}, { skip: offset, limit }).populate("user_id", "full_name");
 
-    const count = await Review.find(criteria).countDocuments();
+    const all_reviews = await Review.find(criteria).select({rating: 1, _id: 0});
 
     return res.status(200).send({
-      total: count,
-      total_page: Math.ceil(count / limit),
+      total: all_reviews.length,
+      total_page: Math.ceil(all_reviews.length / limit),
       current_page: page,
       data: response,
+      all_reviews
     });
   } catch (error) {
     console.log(error);

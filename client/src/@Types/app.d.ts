@@ -25,13 +25,3 @@ interface IReview {
   content: string;
   rating: number;
 }
-
-interface FormInputProps {
-  name: string;
-  control: any;
-  label: string;
-  type?: string;
-  setValue?: any;
-  options?: any;
-  error?: any;
-}

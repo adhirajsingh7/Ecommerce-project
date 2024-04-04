@@ -2,8 +2,8 @@ import { TextField } from "@mui/material";
 import React from "react";
 import { Controller } from "react-hook-form";
 
-const FormInputText = (props: FormInputProps) => {
-  const { name, control, label, type } = props;
+const FormInputText = (props: FormTextFieldProps) => {
+  const { name, control, label, type, multiline = false, rows } = props;
   return (
     <Controller
       name={name}
@@ -23,6 +23,8 @@ const FormInputText = (props: FormInputProps) => {
           fullWidth
           label={label}
           variant="outlined"
+          multiline={multiline}
+          rows={rows}
         />
       )}
     />

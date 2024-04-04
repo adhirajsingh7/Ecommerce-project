@@ -26,5 +26,12 @@ export const productSchema = z.object({
   category: z.string().min(1, { message: "Category is required" }),
 });
 
+export const reviewSchema = z.object({
+  title: z.string().min(1, { message: "Title is required" }),
+  content: z.string().min(1, { message: "Review is required" }),
+  rating: z.coerce.number().gte(1, { message: "Rating is required" }),
+});
+
 export type TSignUpSchema = z.infer<typeof signUpSchema>;
 export type TProductSchema = z.infer<typeof productSchema>;
+export type TReviewSchema = z.infer<typeof reviewSchema>;
