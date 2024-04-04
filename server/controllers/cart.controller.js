@@ -6,7 +6,7 @@ exports.get_all_carts = async (req, res, next) => {
     let criteria = {};
     if (user_id) criteria.user_id = user_id;
 
-    const response = await Cart.find(criteria);
+    const response = await Cart.find(criteria).populate("products.product");
     res.status(200).send(response);
   } catch (error) {
     console.log(error);
@@ -15,10 +15,10 @@ exports.get_all_carts = async (req, res, next) => {
 };
 
 exports.add_product = async (req, res, next) => {
-  const { cart_id } = req.params;
+  const { user_id } = req.params;
   const product = req.body;
   try {
-    const cart = await Cart.findOne({ _id: cart_id });
+    const cart = await Cart.findOne({ user_id: user_id });
     cart.products.push(product);
     await cart.save();
     return res.status(200).json(cart);

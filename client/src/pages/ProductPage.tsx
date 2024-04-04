@@ -2,8 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import LoaderComponent from "../components/Loader";
-import { fetchProductById } from "../api/product.api";
-import { useQuery } from "@tanstack/react-query";
+import { fetchProductById, updateProduct } from "../api/product.api";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   Box,
   Button,
@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import ReviewsComponent from "../components/Reviews section/Reviews.component";
+import { addProductToCart } from "../api/cart.api";
 
 const ProductPage = () => {
   const params = useParams();
@@ -29,10 +30,35 @@ const ProductPage = () => {
     queryFn: () => fetchProductById(params.product_id),
   });
 
+  const {
+    isPending: isAddProductPending,
+    isError: isAddProductError,
+    error: addProductError,
+    mutate
+  } = useMutation({
+    mutationFn: (updatedProduct) => addProductToCart(userId, updatedProduct),
+    onSuccess: (data) => {
+      console.log(data);
+    },
+  });
+
+  const userId = JSON.parse(localStorage.getItem("userId") || "");
+
   if (isPending) return <LoaderComponent />;
 
   if (isError) return <span>Error: {error.message}</span>;
   // console.log(product);
+
+  const handleAddToCart = () => {
+    // console.log(product);
+    const upatedProduct = {
+      product: product._id,
+      quantity: 1,
+      total_price: product.price,
+    };
+    mutate(upatedProduct)
+  };
+
   return (
     <>
       <Stack
@@ -124,6 +150,7 @@ const ProductPage = () => {
                 },
               }}
               startIcon={<ShoppingCartOutlinedIcon />}
+              onClick={handleAddToCart}
             >
               Add to cart
             </Button>

@@ -17,6 +17,11 @@ export const signUpSchema = z.object({
   avatar: z.any(),
 });
 
+export const loginSchema = z.object({
+  email: z.string().min(1, { message: "Email is required" }),
+  password: z.string().min(1, { message: "Password is required" }),
+});
+
 export const productSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
   image: z.any(),
@@ -33,5 +38,6 @@ export const reviewSchema = z.object({
 });
 
 export type TSignUpSchema = z.infer<typeof signUpSchema>;
+export type TLoginSchema = z.infer<typeof loginSchema>;
 export type TProductSchema = z.infer<typeof productSchema>;
 export type TReviewSchema = z.infer<typeof reviewSchema>;
