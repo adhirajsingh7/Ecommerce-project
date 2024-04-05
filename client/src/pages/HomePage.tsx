@@ -1,5 +1,6 @@
 import {
   Box,
+  IconButton,
   InputAdornment,
   Pagination,
   Stack,
@@ -14,6 +15,7 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { fetchProducts } from "../api/product.api";
 import useDebounce from "../hooks/useDebounce";
 import SearchIcon from "@mui/icons-material/Search";
+import ClearIcon from "@mui/icons-material/Clear";
 
 const HomePage = () => {
   const [page, setPage] = React.useState(0);
@@ -66,6 +68,10 @@ const HomePage = () => {
     setPage(0);
   }
 
+  const handleClearText = () => {
+    setSearch("");
+  };
+
   return (
     <Box sx={{ height: "calc(100vh - 64px)", width: 1 }}>
       <Stack direction="row" justifyContent="center" sx={{ p: 2, width: 1 }}>
@@ -81,6 +87,15 @@ const HomePage = () => {
             startAdornment: (
               <InputAdornment position="start">
                 <SearchIcon />
+              </InputAdornment>
+            ),
+            endAdornment: (
+              <InputAdornment position="end">
+                {search && (
+                  <IconButton onClick={handleClearText} edge="end">
+                    <ClearIcon />
+                  </IconButton>
+                )}
               </InputAdornment>
             ),
           }}

@@ -34,7 +34,7 @@ const ProductPage = () => {
     isPending: isAddProductPending,
     isError: isAddProductError,
     error: addProductError,
-    mutate
+    mutate,
   } = useMutation({
     mutationFn: (updatedProduct) => addProductToCart(userId, updatedProduct),
     onSuccess: (data) => {
@@ -51,12 +51,12 @@ const ProductPage = () => {
 
   const handleAddToCart = () => {
     // console.log(product);
-    const upatedProduct = {
+    const updatedProduct = {
       product: product._id,
       quantity: 1,
       total_price: product.price,
     };
-    mutate(upatedProduct)
+    mutate(updatedProduct);
   };
 
   return (
@@ -66,7 +66,7 @@ const ProductPage = () => {
         alignItems="center"
         justifyContent="center"
         gap={8}
-        sx={{ height: "80vh", width: 1 }}
+        sx={{ height: "calc(100vh- 64px)", width: 1, p:2 }}
       >
         <img
           src={product.image}
@@ -83,7 +83,6 @@ const ProductPage = () => {
         <Stack direction="column" gap={2} sx={{ p: 2, width: 1 / 2 }}>
           <Typography variant="h2">{product.name}</Typography>
           <Typography variant="body1">{product.description}</Typography>
-          <Rating name="read-only" value={3.5} readOnly precision={0.5} />
           <Stack direction="column" gap={4}>
             <Divider />
             <Stack

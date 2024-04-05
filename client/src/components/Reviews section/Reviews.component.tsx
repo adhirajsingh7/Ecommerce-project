@@ -34,7 +34,7 @@ export const ReviewCard = (props: any) => {
         p: 2,
       }}
     >
-      <Avatar>{user_id.full_name.toUpperCase().charAt(0)}</Avatar>
+      <Avatar>{user_id?.full_name.toUpperCase().charAt(0)}</Avatar>
       <Stack direction="column">
         <Stack direction="row" gap={2}>
           <Rating name="product-rating" value={rating} readOnly />
