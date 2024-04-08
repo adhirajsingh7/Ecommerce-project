@@ -11,6 +11,7 @@ import React, { useEffect, useState } from "react";
 import { EmptyCart, fetchCart, updateCart } from "../../api/cart.api";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import CartCheckoutComponent from "../../components/Cart Section/CartCheckout.component";
 
 const CartPage = () => {
   const userId = JSON.parse(localStorage.getItem("userId") || "");
@@ -83,55 +84,59 @@ const CartPage = () => {
   const handleEmptyCart = () => {
     emptyCartMutation();
   };
+  // console.log(userCart)
 
   return (
     <Box sx={{ height: "calc(100vh - 64px)", width: 1 }}>
       <Typography variant="h4" textAlign="center" sx={{ p: 2 }}>
         CartPage
       </Typography>
-      <Stack direction="row" justifyContent="flex-end">
+      <Stack direction="row" justifyContent="flex-end" sx={{ mr: 4 }}>
         <Button variant="contained" onClick={handleEmptyCart}>
           Empty cart
         </Button>
       </Stack>
-      <Stack direction="column" gap={3}>
-        {userCart[0].products.map((product, index) => (
-          <Stack
-            key={index}
-            direction="row"
-            gap={2}
-            component={Paper}
-            elevation={2}
-            sx={{p: 2}}
-          >
-            <Stack direction="column" gap={2}>
+      <Stack direction="row" justifyContent="space-around" sx={{ mt: 4 }}>
+        <Stack direction="column" gap={3}>
+          {userCart[0].products.map((product, index) => (
+            <Stack
+              key={index}
+              direction="row"
+              gap={2}
+              component={Paper}
+              elevation={2}
+              sx={{ p: 2 }}
+            >
+              <Stack direction="column" gap={2}>
+                <Typography variant="body1">
+                  name - {product.product.name}
+                </Typography>
+                <Typography variant="body1">
+                  {" "}
+                  description -{product.product.description}
+                </Typography>
+                <Typography variant="body1">
+                  category - {product.product.category}
+                </Typography>
+              </Stack>
               <Typography variant="body1">
-                name - {product.product.name}
+                Quantity - {product.quantity}
               </Typography>
               <Typography variant="body1">
-                {" "}
-                description -{product.product.description}
+                Price - {product.quantity * product.product.price}
               </Typography>
-              <Typography variant="body1">
-                category - {product.product.category}
-              </Typography>
+              <Stack direction="row" height={"fit-content"}>
+                <IconButton onClick={() => handleIncreaseQuantity(product)}>
+                  <AddIcon />
+                </IconButton>
+                <IconButton onClick={() => handleDecreaseQuantity(product)}>
+                  <RemoveIcon />
+                </IconButton>
+              </Stack>
             </Stack>
-            <Typography variant="body1">
-              Quantity - {product.quantity}
-            </Typography>
-            <Typography variant="body1">
-              Price - {product.quantity * product.product.price}
-            </Typography>
-            <Stack direction="row" height={"fit-content"}>
-              <IconButton onClick={() => handleIncreaseQuantity(product)}>
-                <AddIcon />
-              </IconButton>
-              <IconButton onClick={() => handleDecreaseQuantity(product)}>
-                <RemoveIcon />
-              </IconButton>
-            </Stack>
-          </Stack>
-        ))}
+          ))}
+        </Stack>
+        <CartCheckoutComponent {...userCart[0]} />
       </Stack>
     </Box>
   );
