@@ -16,9 +16,9 @@ import { useOutletContext } from "react-router-dom";
 
 const CartPage = () => {
   const queryClient = useQueryClient();
-  
+
   // const userId = JSON.parse(localStorage.getItem("userId") || "");
-  const userCart = useOutletContext()
+  const userCart = useOutletContext();
   // const {
   //   isPending,
   //   isError,
@@ -95,7 +95,7 @@ const CartPage = () => {
       <Typography variant="h4" textAlign="center" sx={{ p: 2 }}>
         CartPage
       </Typography>
-      {userCart[0].products.length > 0 ? (
+      {userCart[0]?.products.length > 0 ? (
         <>
           <Stack direction="row" justifyContent="flex-end" sx={{ mr: 4 }}>
             <Button variant="contained" onClick={handleEmptyCart}>

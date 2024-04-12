@@ -25,7 +25,7 @@ const ProductPage = () => {
   // console.log(userCart)
 
   let productInCart = false;
-  userCart[0].products.forEach((product) => {
+  userCart[0]?.products.forEach((product) => {
     if (product.product._id === params.product_id) {
       productInCart = true;
     }

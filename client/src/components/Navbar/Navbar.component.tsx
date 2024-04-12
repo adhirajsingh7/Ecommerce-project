@@ -14,7 +14,7 @@ const NavbarComponent = (props: any) => {
   const { userCart } = props;
 
   let total_quantity = 0;
-  userCart[0].products.forEach(
+  userCart[0]?.products.forEach(
     (product: any) => (total_quantity += product.quantity)
   );
   // console.log(total_quantity);
