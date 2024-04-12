@@ -6,9 +6,19 @@ import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import SettingsIcon from "@mui/icons-material/Settings";
 import { useNavigate } from "react-router-dom";
+import { Badge } from "@mui/material";
 
-const NavbarComponent = () => {
+const NavbarComponent = (props: any) => {
+  const { userCart } = props;
+
+  let total_quantity = 0;
+  userCart[0].products.forEach(
+    (product: any) => (total_quantity += product.quantity)
+  );
+  // console.log(total_quantity);
+
   const navigate = useNavigate();
   const handleHomeNavigation = () => {
     navigate("/");
@@ -16,6 +26,10 @@ const NavbarComponent = () => {
   const handleCartNavigation = () => {
     navigate("/cart");
   };
+  const handleSettingsNavigation = () => {
+    navigate("/dashboard");
+  };
+
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>
@@ -39,7 +53,12 @@ const NavbarComponent = () => {
               Ecommerce
             </Typography>
             <IconButton onClick={handleCartNavigation}>
-              <ShoppingCartIcon sx={{ color: "white" }} />
+              <Badge color="secondary" badgeContent={total_quantity} max={10}>
+                <ShoppingCartIcon sx={{ color: "white" }} />
+              </Badge>
+            </IconButton>
+            <IconButton onClick={handleSettingsNavigation}>
+              <SettingsIcon sx={{ color: "white" }} />
             </IconButton>
           </Toolbar>
         </AppBar>

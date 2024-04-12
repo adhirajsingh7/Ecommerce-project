@@ -139,7 +139,7 @@ const SignupPage = () => {
               label={"Full name"}
             />
             <FormInputText
-              type="text"
+              type="number"
               name={"mobile"}
               control={control}
               label={"Mobile"}

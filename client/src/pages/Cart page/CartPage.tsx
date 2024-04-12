@@ -12,20 +12,24 @@ import { EmptyCart, fetchCart, updateCart } from "../../api/cart.api";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import CartCheckoutComponent from "../../components/Cart Section/CartCheckout.component";
+import { useOutletContext } from "react-router-dom";
 
 const CartPage = () => {
-  const userId = JSON.parse(localStorage.getItem("userId") || "");
   const queryClient = useQueryClient();
+  
+  // const userId = JSON.parse(localStorage.getItem("userId") || "");
+  const userCart = useOutletContext()
+  // const {
+  //   isPending,
+  //   isError,
+  //   error,
+  //   data: userCart,
+  // } = useQuery({
+  //   queryKey: ["cart"],
+  //   queryFn: () => fetchCart({ userId }),
+  // });
 
-  const {
-    isPending,
-    isError,
-    error,
-    data: userCart,
-  } = useQuery({
-    queryKey: ["cart"],
-    queryFn: () => fetchCart({ userId }),
-  });
+  // console.log(userCart);
 
   const {
     isPending: isUpdateProductPending,
@@ -55,13 +59,13 @@ const CartPage = () => {
 
   // console.log(userCart);
 
-  if (isPending) {
-    return <span>Loading...</span>;
-  }
+  // if (isPending) {
+  //   return <span>Loading...</span>;
+  // }
 
-  if (isError) {
-    return <span>Error: {error.message}</span>;
-  }
+  // if (isError) {
+  //   return <span>Error: {error.message}</span>;
+  // }
 
   const handleIncreaseQuantity = (product) => {
     const upatedProduct = {
@@ -91,53 +95,76 @@ const CartPage = () => {
       <Typography variant="h4" textAlign="center" sx={{ p: 2 }}>
         CartPage
       </Typography>
-      <Stack direction="row" justifyContent="flex-end" sx={{ mr: 4 }}>
-        <Button variant="contained" onClick={handleEmptyCart}>
-          Empty cart
-        </Button>
-      </Stack>
-      <Stack direction="row" justifyContent="space-around" sx={{ mt: 4 }}>
-        <Stack direction="column" gap={3}>
-          {userCart[0].products.map((product, index) => (
-            <Stack
-              key={index}
-              direction="row"
-              gap={2}
-              component={Paper}
-              elevation={2}
-              sx={{ p: 2 }}
-            >
-              <Stack direction="column" gap={2}>
-                <Typography variant="body1">
-                  name - {product.product.name}
-                </Typography>
-                <Typography variant="body1">
-                  {" "}
-                  description -{product.product.description}
-                </Typography>
-                <Typography variant="body1">
-                  category - {product.product.category}
-                </Typography>
-              </Stack>
-              <Typography variant="body1">
-                Quantity - {product.quantity}
-              </Typography>
-              <Typography variant="body1">
-                Price - {product.quantity * product.product.price}
-              </Typography>
-              <Stack direction="row" height={"fit-content"}>
-                <IconButton onClick={() => handleIncreaseQuantity(product)}>
-                  <AddIcon />
-                </IconButton>
-                <IconButton onClick={() => handleDecreaseQuantity(product)}>
-                  <RemoveIcon />
-                </IconButton>
-              </Stack>
+      {userCart[0].products.length > 0 ? (
+        <>
+          <Stack direction="row" justifyContent="flex-end" sx={{ mr: 4 }}>
+            <Button variant="contained" onClick={handleEmptyCart}>
+              Empty cart
+            </Button>
+          </Stack>
+          <Stack direction="row" justifyContent="space-around" sx={{ mt: 4 }}>
+            <Stack direction="column" gap={3}>
+              {userCart[0].products.map((product, index) => (
+                <Stack
+                  key={index}
+                  direction="row"
+                  gap={3}
+                  component={Paper}
+                  elevation={2}
+                  sx={{ p: 2 }}
+                >
+                  <img
+                    src={product.product.image}
+                    alt=""
+                    style={{
+                      height: "100px",
+                      width: "100px",
+                      objectFit: "cover",
+                      borderRadius: "10px",
+                    }}
+                  />
+                  <Stack direction="column" gap={2}>
+                    <Typography variant="body1">
+                      name - {product.product.name}
+                    </Typography>
+                    <Typography variant="body1">
+                      {" "}
+                      description -{product.product.description}
+                    </Typography>
+                    <Typography variant="body1">
+                      category - {product.product.category}
+                    </Typography>
+                  </Stack>
+                  <Typography variant="body1">
+                    Quantity - {product.quantity}
+                  </Typography>
+                  <Typography variant="body1">
+                    Price - {product.quantity * product.product.price}
+                  </Typography>
+                  <Stack direction="row" height={"fit-content"}>
+                    <IconButton onClick={() => handleIncreaseQuantity(product)}>
+                      <AddIcon />
+                    </IconButton>
+                    <IconButton onClick={() => handleDecreaseQuantity(product)}>
+                      <RemoveIcon />
+                    </IconButton>
+                  </Stack>
+                </Stack>
+              ))}
             </Stack>
-          ))}
+            <CartCheckoutComponent {...userCart[0]} />
+          </Stack>
+        </>
+      ) : (
+        <Stack
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+          sx={{ height: "calc(100vh - 64px - 72px)" }}
+        >
+          <Typography variant="h4">No products found</Typography>
         </Stack>
-        <CartCheckoutComponent {...userCart[0]} />
-      </Stack>
+      )}
     </Box>
   );
 };

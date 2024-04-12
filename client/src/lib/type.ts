@@ -37,7 +37,18 @@ export const reviewSchema = z.object({
   rating: z.coerce.number().gte(1, { message: "Rating is required" }),
 });
 
+export const addressSchema = z.object({
+  name: z.string().trim().min(1, { message: "Name is required" }),
+  location: z.string().min(1, { message: "Location is required" }),
+  country: z.string().min(1, { message: "Country is required" }),
+  state: z.string().min(1, { message: "State is required" }),
+  city: z.string().min(1, { message: "City is required" }),
+  address: z.string().min(1, { message: "Address is required" }),
+  zip_code: z.coerce.number().gte(1, { message: "Zip code is required" }),
+});
+
 export type TSignUpSchema = z.infer<typeof signUpSchema>;
 export type TLoginSchema = z.infer<typeof loginSchema>;
 export type TProductSchema = z.infer<typeof productSchema>;
 export type TReviewSchema = z.infer<typeof reviewSchema>;
+export type TAddressSchema = z.infer<typeof addressSchema>;
