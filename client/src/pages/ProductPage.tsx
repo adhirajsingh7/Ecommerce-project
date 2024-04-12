@@ -1,9 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import LoaderComponent from "../components/Loader";
 import { fetchProductById, updateProduct } from "../api/product.api";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Box,
   Button,
@@ -19,6 +19,18 @@ import { addProductToCart } from "../api/cart.api";
 
 const ProductPage = () => {
   const params = useParams();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const userCart = useOutletContext();
+  // console.log(userCart)
+
+  let productInCart = false;
+  userCart[0].products.forEach((product) => {
+    if (product.product._id === params.product_id) {
+      productInCart = true;
+    }
+  });
+  console.log(productInCart);
 
   const {
     isPending,
@@ -38,6 +50,7 @@ const ProductPage = () => {
   } = useMutation({
     mutationFn: (updatedProduct) => addProductToCart(userId, updatedProduct),
     onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
       console.log(data);
     },
   });
@@ -59,6 +72,20 @@ const ProductPage = () => {
     mutate(updatedProduct);
   };
 
+  const handleBuyNow = () => {
+    const updatedProduct = {
+      product: product._id,
+      quantity: 1,
+      total_price: product.price,
+    };
+    mutate(updatedProduct);
+    navigate("/cart");
+  };
+
+  const handleViewCart = () => {
+    navigate("/cart");
+  };
+
   return (
     <>
       <Stack
@@ -66,7 +93,7 @@ const ProductPage = () => {
         alignItems="center"
         justifyContent="center"
         gap={8}
-        sx={{ height: "calc(100vh- 64px)", width: 1, p:2 }}
+        sx={{ height: "calc(100vh- 64px)", width: 1, p: 2 }}
       >
         <img
           src={product.image}
@@ -123,36 +150,58 @@ const ProductPage = () => {
             <Divider />
           </Stack>
           <Stack direction="row" gap={6}>
-            <Button
-              variant="contained"
-              size="large"
-              color="secondary"
-              sx={{
-                "&.MuiButton-root": {
-                  borderRadius: "30px",
-                  width: "300px",
-                  height: "60px",
-                },
-              }}
-            >
-              Buy now
-            </Button>
-            <Button
-              variant="outlined"
-              size="large"
-              color="secondary"
-              sx={{
-                "&.MuiButton-root": {
-                  borderRadius: "30px",
-                  width: "300px",
-                  height: "60px",
-                },
-              }}
-              startIcon={<ShoppingCartOutlinedIcon />}
-              onClick={handleAddToCart}
-            >
-              Add to cart
-            </Button>
+            {productInCart ? (
+              <Button
+                variant="outlined"
+                size="large"
+                color="secondary"
+                sx={{
+                  "&.MuiButton-root": {
+                    borderRadius: "30px",
+                    width: "300px",
+                    height: "60px",
+                  },
+                }}
+                startIcon={<ShoppingCartOutlinedIcon />}
+                onClick={handleViewCart}
+              >
+                View Cart
+              </Button>
+            ) : (
+              <>
+                <Button
+                  variant="contained"
+                  size="large"
+                  color="secondary"
+                  sx={{
+                    "&.MuiButton-root": {
+                      borderRadius: "30px",
+                      width: "300px",
+                      height: "60px",
+                    },
+                  }}
+                  onClick={handleBuyNow}
+                >
+                  Buy now
+                </Button>
+                <Button
+                  variant="outlined"
+                  size="large"
+                  color="secondary"
+                  sx={{
+                    "&.MuiButton-root": {
+                      borderRadius: "30px",
+                      width: "300px",
+                      height: "60px",
+                    },
+                  }}
+                  startIcon={<ShoppingCartOutlinedIcon />}
+                  onClick={handleAddToCart}
+                >
+                  Add to cart
+                </Button>
+              </>
+            )}
           </Stack>
         </Stack>
       </Stack>

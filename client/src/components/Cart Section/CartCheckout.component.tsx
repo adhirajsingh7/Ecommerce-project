@@ -12,7 +12,12 @@ const CartCheckoutComponent = (props: any) => {
   }, [products]);
 
   return (
-    <Stack direction="column" gap={4} sx={{ p: 4 }} component={Paper}>
+    <Stack
+      direction="column"
+      gap={4}
+      sx={{ p: 4, maxHeight: "250px" }}
+      component={Paper}
+    >
       <Typography variant="h4">Checkout</Typography>
       <Typography variant="body1">Total Amount - {amount}</Typography>
       <Button variant="contained">Checkout</Button>

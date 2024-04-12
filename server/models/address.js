@@ -7,6 +7,14 @@ const address_schema = new Schema(
       ref: "User",
       required: true,
     },
+    name: {
+      type: String,
+    },
+    location: {
+      type: String,
+      // enum: ["home", "work", "other"],
+      // default: "other",
+    },
     country: {
       type: String,
     },

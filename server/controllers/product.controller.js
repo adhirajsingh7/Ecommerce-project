@@ -1,5 +1,8 @@
 const { Product } = require("../models/product");
-const { delete_on_cloudinary, upload_on_cloudinary } = require("../utils/cloudinary");
+const {
+  delete_on_cloudinary,
+  upload_on_cloudinary,
+} = require("../utils/cloudinary");
 
 exports.get_products = async (req, res, next) => {
   let { page = 0, limit = 10, name = "" } = req.query;
@@ -94,7 +97,6 @@ exports.update_product = async (req, res, next) => {
 exports.delete_product = async (req, res, next) => {
   const { product_id } = req.params;
   try {
-
     const product = await Product.findById(product_id);
     if (!product) return res.status(404).json({ message: "Product not found" });
 
