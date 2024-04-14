@@ -3,7 +3,15 @@ import React from "react";
 import { Controller } from "react-hook-form";
 
 const FormInputText = (props: FormTextFieldProps) => {
-  const { name, control, label, type, multiline = false, rows } = props;
+  const {
+    name,
+    control,
+    label,
+    type,
+    multiline = false,
+    rows,
+    size = "small",
+  } = props;
   return (
     <Controller
       name={name}
@@ -16,7 +24,7 @@ const FormInputText = (props: FormTextFieldProps) => {
         <TextField
           type={type}
           helperText={error ? error.message : null}
-          size="small"
+          size={size}
           error={!!error}
           onChange={onChange}
           value={value}

@@ -165,7 +165,7 @@ const ProductPage = () => {
                 startIcon={<ShoppingCartOutlinedIcon />}
                 onClick={handleViewCart}
               >
-                View Cart
+                View in Cart
               </Button>
             ) : (
               <>

@@ -4,6 +4,7 @@ const {
   upload_on_cloudinary,
   delete_on_cloudinary,
 } = require("../utils/cloudinary");
+const bcrypt = require("bcrypt");
 
 exports.get_users = async (req, res, next) => {
   try {
@@ -40,9 +41,44 @@ exports.create_user = async (req, res, next) => {
 
 exports.update_user = async (req, res, next) => {
   const { user_id } = req.params;
-  const user = req.body;
+  const updated_user = req.body;
+  const { previous_password, new_password } = req.body;
+
+  // console.log(req.body);
+  // console.log(req.files);
+  // return res.status(200).send("asdasd");
+
   try {
-    const response = await User.findOneAndUpdate({ _id: user_id }, user);
+    if (new_password) {
+      const user = await User.findOne({ _id: user_id });
+      const is_password_valid = await user.is_password_correct(
+        previous_password
+      );
+      if (!is_password_valid) {
+        // throw new Error("Password is wrong");
+        return res.status(400).json({ message: "Password is wrong" });
+      }
+
+      updated_user.password = await bcrypt.hash(new_password, 10);
+    }
+
+    // upload image
+    let avatar_local_path;
+    if (
+      req.files &&
+      Array.isArray(req.files.avatar) &&
+      req.files.avatar.length > 0
+    ) {
+      avatar_local_path = req.files.avatar[0].path;
+    }
+
+    const avatar = await upload_on_cloudinary(avatar_local_path);
+    updated_user.avatar = avatar?.url || "";
+
+    const response = await User.findOneAndUpdate(
+      { _id: user_id },
+      updated_user
+    );
     res.status(200).json({ message: "User updated successfully." });
   } catch (error) {
     console.log(error);
@@ -71,7 +107,14 @@ exports.delete_user = async (req, res, next) => {
 
 // signup user
 exports.signup_user = async (req, res, next) => {
-  const { username = "", email = "", password = "", full_name = "", mobile = 0, role = "user" } = req.body;
+  const {
+    username = "",
+    email = "",
+    password = "",
+    full_name = "",
+    mobile = 0,
+    role = "user",
+  } = req.body;
   console.log(req.body);
   console.log(req.files);
   // console.log(req.files.avatar[0]);
@@ -102,7 +145,7 @@ exports.signup_user = async (req, res, next) => {
     avatar: avatar?.url || "",
   });
 
-  const user_cart = await Cart.create({user_id: user._id});
+  const user_cart = await Cart.create({ user_id: user._id });
 
   return res.status(201).json(user);
 };

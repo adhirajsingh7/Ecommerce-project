@@ -15,6 +15,7 @@ interface FormTextFieldProps {
   type?: string;
   multiline?: boolean;
   rows?: number;
+  size?: string;
 }
 
 interface FormRatingProps {

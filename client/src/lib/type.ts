@@ -47,8 +47,39 @@ export const addressSchema = z.object({
   zip_code: z.coerce.number().gte(1, { message: "Zip code is required" }),
 });
 
+export const CountrySchema = z.object({
+  country: z.any(),
+  state: z.any(),
+  city: z.any(),
+});
+export type TCountrySchema = z.infer<typeof CountrySchema>;
+
+export const passwordChangeSchema = z
+  .object({
+    password: z.string().min(1, "Password is required"),
+    new_password: z.string().min(1, "New Password is required"),
+    confirm_password: z.string(),
+  })
+  .refine((data) => data.new_password === data.confirm_password, {
+    message: "Passwords must match",
+    path: ["confirm_password"],
+  });
+
+export const personalInfoSchema = z.object({
+  username: z.string().min(1, { message: "Username is required" }),
+  email: z.string().min(1, { message: "Email is required" }),
+  full_name: z.string().min(1, { message: "Full name is required" }),
+  mobile: z
+    .string()
+    .regex(phoneRegex, { message: "Invalid phone number" })
+    .min(5, { message: "Phone must contain at least 5 characters" })
+    .max(16, { message: "Phone contain at most 16 characters" }),
+});
+
 export type TSignUpSchema = z.infer<typeof signUpSchema>;
 export type TLoginSchema = z.infer<typeof loginSchema>;
 export type TProductSchema = z.infer<typeof productSchema>;
 export type TReviewSchema = z.infer<typeof reviewSchema>;
 export type TAddressSchema = z.infer<typeof addressSchema>;
+export type TPasswordChangeSchema = z.infer<typeof passwordChangeSchema>;
+export type TpersonalInfoSchema = z.infer<typeof personalInfoSchema>;

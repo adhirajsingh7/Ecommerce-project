@@ -10,7 +10,10 @@ router
 router
   .route("/:user_id")
   .get(user_controller.get_user_by_id)
-  .put(user_controller.update_user)
+  .put(
+    upload.fields([{ name: "avatar", maxCount: 1 }]),
+    user_controller.update_user
+  )
   .delete(user_controller.delete_user);
 
 // additional routes
