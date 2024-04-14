@@ -5,15 +5,33 @@ const {
 } = require("../utils/cloudinary");
 
 exports.get_products = async (req, res, next) => {
-  let { page = 0, limit = 10, name = "" } = req.query;
+  let {
+    page = 0,
+    limit = 10,
+    name = "",
+    category = "",
+    sortBy = "",
+  } = req.query;
   page = parseInt(page) || 0;
   limit = parseInt(limit) || 10;
 
   let offset = page * limit;
   let criteria = {};
   if (name) criteria.name = { $regex: name, $options: "i" };
+  if (category) criteria.category = { $in: category.split(",") };
+
+  // sorting logic
+  if (sortBy) {
+    if (sortBy === "price_low") sortBy = { price: 1 };
+    if (sortBy === "price_high") sortBy = { price: -1 };
+    if (sortBy === "relevance") sortBy = { created_at: 1 };
+    if (sortBy === "newest") sortBy = { created_at: -1 };
+  } else {
+    sortBy = { created_at: 1 };
+  }
+
   try {
-    const response = await Product.find(criteria)
+    const response = await Product.find(criteria, {}, { sort: sortBy })
       .limit(limit * 1)
       .skip(offset)
       .exec();

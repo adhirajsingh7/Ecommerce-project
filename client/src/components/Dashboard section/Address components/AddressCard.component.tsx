@@ -11,8 +11,18 @@ import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import WorkOutlineOutlinedIcon from "@mui/icons-material/WorkOutlineOutlined";
+import PlaceOutlinedIcon from "@mui/icons-material/PlaceOutlined";
 
-const AddressCardComponent = () => {
+const addressIcons = {
+  Home: <HomeOutlinedIcon />,
+  Work: <WorkOutlineOutlinedIcon />,
+  Other: <PlaceOutlinedIcon />,
+};
+
+const AddressCardComponent = (props: any) => {
+  const { address, location, country, state, city, name, zip_code } = props;
+  console.log(location);
   return (
     <Stack
       direction="row"
@@ -21,17 +31,22 @@ const AddressCardComponent = () => {
       component={Paper}
     >
       <Stack direction="row" gap={2}>
-        <HomeOutlinedIcon />
+        {/* <HomeOutlinedIcon /> */}
+        {addressIcons[location]}
         <Stack direction="column" gap={1}>
           <Typography variant="body1" fontWeight={600}>
-            Home
+            {location}
           </Typography>
 
           <Typography variant="body1" sx={{ color: "#828282" }}>
+            <span style={{ color: "black" }}> {name} </span>
+            {zip_code}, {address}, {country}, {state}, {city}
+          </Typography>
+          {/* <Typography variant="body1" sx={{ color: "#828282" }}>
             <span style={{ color: "black" }}> Richa Hussein </span>
             11,01,, Paper Street Soap Ltd., Institutional Area, Lodi Colony,New
             Delhi
-          </Typography>
+          </Typography> */}
         </Stack>
       </Stack>
       <Stack

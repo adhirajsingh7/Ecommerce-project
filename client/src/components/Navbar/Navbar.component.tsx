@@ -8,7 +8,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useNavigate } from "react-router-dom";
-import { Badge } from "@mui/material";
+import { Badge, Button, Stack } from "@mui/material";
 
 const NavbarComponent = (props: any) => {
   const { userCart } = props;
@@ -28,6 +28,9 @@ const NavbarComponent = (props: any) => {
   };
   const handleSettingsNavigation = () => {
     navigate("/dashboard");
+  };
+  const handleProductsNavigation = () => {
+    navigate("/products");
   };
 
   return (
@@ -52,14 +55,22 @@ const NavbarComponent = (props: any) => {
             >
               Ecommerce
             </Typography>
-            <IconButton onClick={handleCartNavigation}>
-              <Badge color="secondary" badgeContent={total_quantity} max={10}>
-                <ShoppingCartIcon sx={{ color: "white" }} />
-              </Badge>
-            </IconButton>
-            <IconButton onClick={handleSettingsNavigation}>
-              <SettingsIcon sx={{ color: "white" }} />
-            </IconButton>
+            <Stack direction="row" gap={2}>
+              <Button
+                sx={{ color: "white" }}
+                onClick={() => handleProductsNavigation()}
+              >
+                View products
+              </Button>
+              <IconButton onClick={handleCartNavigation}>
+                <Badge color="secondary" badgeContent={total_quantity} max={10}>
+                  <ShoppingCartIcon sx={{ color: "white" }} />
+                </Badge>
+              </IconButton>
+              <IconButton onClick={handleSettingsNavigation}>
+                <SettingsIcon sx={{ color: "white" }} />
+              </IconButton>
+            </Stack>
           </Toolbar>
         </AppBar>
       </Box>

@@ -17,7 +17,7 @@ import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import ReviewsComponent from "../components/Reviews section/Reviews.component";
 import { addProductToCart } from "../api/cart.api";
 
-const ProductPage = () => {
+const ProductDetailsPage = () => {
   const params = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -210,4 +210,4 @@ const ProductPage = () => {
   );
 };
 
-export default ProductPage;
+export default ProductDetailsPage;

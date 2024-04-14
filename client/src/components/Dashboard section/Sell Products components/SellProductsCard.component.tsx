@@ -2,14 +2,22 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 import React from "react";
 import demoImage from "../../../assets/images/icecream-image.jpg";
 import "./SellProductsCard.styles.scss";
+import { useNavigate } from "react-router-dom";
 
-const SellProductsCardComponent = () => {
+const SellProductsCardComponent = (product: IProduct) => {
+  const navigate = useNavigate();
+
+  const handleView = (id: string) => {
+    if (id) {
+      navigate(`/product/${id}`);
+    }
+  };
   return (
     <Stack
       className="card-container"
       direction="column"
       sx={{
-        height: "380px",
+        height: "350px",
         width: "300px",
         borderRadius: "25px",
         bgcolor: "white",
@@ -17,7 +25,7 @@ const SellProductsCardComponent = () => {
     >
       <img
         className="card-image"
-        src={demoImage}
+        src={product.image || demoImage}
         alt=""
         style={{
           maxHeight: "50%",
@@ -29,22 +37,27 @@ const SellProductsCardComponent = () => {
       />
       <Stack direction="column" sx={{ p: 2 }} gap={1}>
         <Typography variant="h5" fontWeight={600}>
-          Vanila ice cream
+          {product.name || "Vanila ice cream"}
         </Typography>
-        <Typography variant="body1">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Inventore
+        <Typography variant="body1" sx={{ textOverflow: "hidden" }}>
+          {product.description ||
+            "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Inventore"}
         </Typography>
         <Stack
           direction="row"
-          justifyContent="flex-start"
+          justifyContent="space-between"
           alignItems="center"
           gap={2}
         >
           <Typography variant="h4" fontWeight={600}>
-            $10
+            ${product.price || "10"}
           </Typography>
-          <Button variant="contained" color="warning">
-            Add to cart
+          <Button
+            variant="contained"
+            color="warning"
+            onClick={() => handleView(product?._id)}
+          >
+            View item
           </Button>
         </Stack>
       </Stack>

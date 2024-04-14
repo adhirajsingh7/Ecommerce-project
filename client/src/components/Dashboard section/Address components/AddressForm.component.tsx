@@ -52,7 +52,7 @@ const AddressFormComponent = (props: any) => {
 
   const onSubmit: SubmitHandler<any> = async (data) => {
     console.log(data);
-    // createAddressMutation(data);
+    createAddressMutation(data);
     reset();
     closeModal();
   };

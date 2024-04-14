@@ -5,11 +5,15 @@ export const fetchProducts = async (options: any) => {
     page = 1,
     rowsPerPage: limit = 5,
     debouncedSearch: name = "",
+    categories = [],
+    sortProducts: sortBy = "",
   } = options || {};
 
+  let categoriesFilter = "";
+  categoriesFilter = categories.join(",");
   try {
     const { data } = await axios.get(
-      `/products?page=${page}&limit=${limit}&name=${name}`
+      `/products?page=${page}&limit=${limit}&name=${name}&category=${categoriesFilter}&sortBy=${sortBy}`
     );
     return data;
   } catch (error) {

@@ -27,13 +27,12 @@ const ProfilePage = () => {
     return <span>Error: {error.message}</span>;
   }
   // console.log(user);
-  console.log(user)
   return (
     <Stack direction="column" gap={2} sx={{ p: 2, overflow: "auto" }}>
       {/* ProfilePage */}
       <AvatarUploadComponent {...user} />
       <PersonalInformationComponent {...user} />
-      <ChangePasswordComponent userId={user._id}/>
+      <ChangePasswordComponent userId={user._id} />
     </Stack>
   );
 };
