@@ -32,6 +32,21 @@ export const role_options = [
   },
 ];
 
+export const address_type_options = [
+  {
+    label: "Home",
+    value: "home",
+  },
+  {
+    label: "Office",
+    value: "office",
+  },
+  {
+    label: "Other",
+    value: "other",
+  },
+];
+
 export const MAX_UPLOAD_SIZE = 1024 * 1024 * 5; // 5mb
 export const ACCEPTED_IMAGE_TYPES = [
   "image/jpeg",

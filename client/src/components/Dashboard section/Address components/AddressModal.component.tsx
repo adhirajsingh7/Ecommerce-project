@@ -1,11 +1,7 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { IconButton, styled } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import ProductFormComponent from "../../Product form/ProductForm.component";
 import AddIcon from "@mui/icons-material/Add";
 import AddressFormComponent from "./AddressForm.component";
 
@@ -20,7 +16,7 @@ const style = {
   p: 6,
 };
 
-const AddressModalComponent = (product: any) => {
+const AddressModalComponent = (address: any) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -47,11 +43,7 @@ const AddressModalComponent = (product: any) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <AddressFormComponent
-            title={"Edit"}
-            product={product}
-            closeModal={handleClose}
-          />
+          <AddressFormComponent title={"Edit"} closeModal={handleClose} />
         </Box>
       </Modal>
     </>

@@ -25,3 +25,18 @@ interface IReview {
   content: string;
   rating: number;
 }
+
+interface IAddress {
+  _id?: string;
+  user_id?: string;
+  name: string;
+  phone: number;
+  pincode: number;
+  city: string;
+  state: string;
+  country: string;
+  locality: string;
+  flat_no: string;
+  landmark?: string;
+  address_type: "home" | "work" | "other";
+}
