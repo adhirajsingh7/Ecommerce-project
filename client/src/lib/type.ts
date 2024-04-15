@@ -39,11 +39,10 @@ export const reviewSchema = z.object({
 
 export const addressSchema = z.object({
   name: z.string().trim().min(1, { message: "Name is required" }),
-  phone: z
-    .string()
-    .regex(phoneRegex, { message: "Invalid phone number" })
-    .min(5, { message: "Phone must contain at least 5 characters" })
-    .max(16, { message: "Phone contain at most 16 characters" }),
+  phone: z.coerce
+    .number()
+    .gte(1, { message: "Phone is required" })
+    .lte(10000000000, { message: "Phone number must be less than 10 numbers" }),
   pincode: z.coerce.number().gte(1, { message: "Pincode is required" }),
   city: z.string().min(1, { message: "City is required" }),
   state: z.string().min(1, { message: "State is required" }),
@@ -53,13 +52,6 @@ export const addressSchema = z.object({
   landmark: z.string(),
   address_type: z.enum(["home", "office", "other"]),
 });
-
-export const CountrySchema = z.object({
-  country: z.any(),
-  state: z.any(),
-  city: z.any(),
-});
-export type TCountrySchema = z.infer<typeof CountrySchema>;
 
 export const passwordChangeSchema = z
   .object({

@@ -1,163 +1,57 @@
-import {
-  Autocomplete,
-  Box,
-  Button,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { Country, State, City } from "country-state-city";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { CountrySchema, TCountrySchema } from "../../lib/type";
+import React, { useState } from "react";
+import { Box, Button, Stack, Typography } from "@mui/material";
+import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
+import { useQuery } from "@tanstack/react-query";
+import { fetchAddresses } from "../../api/address.api";
+import SelectAddressCardComponent from "../../components/Cart Section/Checkout components/SelectAddressCard.component";
 
 const OrdersPage = () => {
-  const [selectedCountry, setSelectedCountry] = useState(null);
-  const [selectedState, setSelectedState] = useState(null);
-  const [selectedCity, setSelectedCity] = useState(null);
+  const userId = JSON.parse(localStorage.getItem("userId") || "");
 
-  const [stateOptions, setStateOptions] = useState([]);
-  const [cityOptions, setCityOptions] = useState([]);
-
-  const handleCountryChange = (event, newValue) => {
-    setSelectedCountry(newValue);
-    setSelectedState(null);
-    setSelectedCity(null);
-    setStateOptions([]);
-    setCityOptions([]);
-    if (newValue) {
-      const states = State.getStatesOfCountry(newValue.isoCode);
-      setStateOptions(states);
-    }
-  };
-  // console.log(selectedCountry);
-
-  const handleStateChange = (event, newValue) => {
-    setSelectedState(newValue);
-    setSelectedCity(null);
-    setCityOptions([]);
-    if (newValue) {
-      const cities = City.getCitiesOfState(
-        selectedCountry?.isoCode,
-        newValue.isoCode
-      );
-      setCityOptions(cities);
-    }
-  };
-  // console.log(cityOptions);
-
-  const handleCityChange = (event, newValue) => {
-    setSelectedCity(newValue);
-  };
-
-  const defaultValues = {
-    country: null,
-    state: "",
-    city: "",
-  };
+  const [selectedAddress, setSelectedAddress] = useState("");
 
   const {
-    register,
-    handleSubmit,
-    watch,
-    control,
-    reset,
-    formState: { errors },
-  } = useForm<TCountrySchema>({
-    defaultValues,
-    resolver: zodResolver(CountrySchema),
+    isPending,
+    isError,
+    error,
+    data: addressList,
+  } = useQuery({
+    queryKey: ["address"],
+    queryFn: () => fetchAddresses({ userId }),
   });
 
-  const onSubmit: SubmitHandler<any> = async (data) => {
-    console.log(data);
-    // reset();
-  };
-
-  return (
-    <Box>
-      <Typography variant="h4">ProfilePage</Typography>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Stack direction="column" gap={2} sx={{ width: 1 }}>
-          <Typography variant="h5">React hook form</Typography>
-          asdsad
-          <Controller
-            name={"country"}
-            control={control}
-            render={({
-              field: { onChange, value },
-              fieldState: { error },
-              formState,
-            }) => (
-              // <TextField
-              //   helperText={error ? error.message : null}
-              //   error={!!error}
-              //   onChange={onChange}
-              //   value={value}
-              //   label={label}
-              // />
-              <Autocomplete
-                // value={value}
-                value={value ? { name: value } : null}
-                // onChange={handleCountryChange}
-                onChange={(event, newValue) => {
-                  const selectedCountryName = newValue ? newValue.name : "";
-                  onChange(selectedCountryName);
-                  // onChange(newValue); // Pass the new value to the onChange function provided by React Hook Form
-                  handleCountryChange(event, newValue); // Call your custom function
-                }}
-                options={Country.getAllCountries()}
-                // getOptionLabel={(option) => option.name}
-                getOptionLabel={(option) => (option ? option.name : "")}
-                isOptionEqualToValue={(option, value) =>
-                  option.name === value.name
-                }
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Country"
-                    helperText={error ? error.message : null}
-                    error={!!error}
-                    // onChange={onChange}
-                    //   value={value}
-                  />
-                )}
-              />
-            )}
-          />
-          <Button type="submit" variant="contained">
-            Submit
-          </Button>
-        </Stack>
-      </form>
-      <Stack direction="column" gap={2} sx={{ width: 1 }}>
-        {/* <Autocomplete
-          value={selectedCountry}
-          onChange={handleCountryChange}
-          options={Country.getAllCountries()}
-          getOptionLabel={(option) => option.name}
-          renderInput={(params) => <TextField {...params} label="Country" />}
-        /> */}
-        {selectedCountry && (
-          <Autocomplete
-            value={selectedState}
-            onChange={handleStateChange}
-            options={stateOptions}
-            getOptionLabel={(option) => option.name}
-            renderInput={(params) => <TextField {...params} label="State" />}
-          />
-        )}
-        {selectedState && (
-          <Autocomplete
-            value={selectedCity}
-            onChange={handleCityChange}
-            options={cityOptions}
-            getOptionLabel={(option) => option.name}
-            renderInput={(params) => <TextField {...params} label="City" />}
-          />
-        )}
+  if (isPending) {
+    return (
+      <Stack
+        justifyContent="center"
+        alignItems="center"
+        sx={{ height: "calc(100vh - 64px)" }}
+      >
+        <ClimbingBoxLoader color="#FE6D87" size={25} />
       </Stack>
-    </Box>
+    );
+  }
+
+  if (isError) {
+    return <span>Error: {error.message}</span>;
+  }
+
+  // console.log(addressList);
+  console.log(selectedAddress);
+  return (
+    <Stack direction="column" sx={{ p: 2, width: 1, overflow: "auto" }} gap={2}>
+      <Typography variant="h5">Orders</Typography>
+      <Stack direction="row" gap={4}>
+        {addressList?.data.map((address, index) => (
+          <SelectAddressCardComponent
+            key={index}
+            address={address}
+            selectedAddress={selectedAddress}
+            setSelectedAddress={setSelectedAddress}
+          />
+        ))}
+      </Stack>
+    </Stack>
   );
 };
 

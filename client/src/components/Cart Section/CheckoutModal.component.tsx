@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import AddIcon from "@mui/icons-material/Add";
-import AddressFormComponent from "./AddressForm.component";
+import SelectAddressComponent from "./Checkout components/SelectAddress.component";
 
 const style = {
   position: "absolute",
@@ -16,20 +16,16 @@ const style = {
   p: 4,
 };
 
-const AddressModalComponent = () => {
+const CheckoutModalComponent = (props: any) => {
+  const { amount, cartId } = props;
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   return (
     <>
-      <Button
-        variant="outlined"
-        sx={{ width: "200px" }}
-        startIcon={<AddIcon />}
-        onClick={handleOpen}
-      >
-        Add address
+      <Button variant="outlined" sx={{ width: "200px" }} onClick={handleOpen}>
+        Checkout
       </Button>
 
       <Modal
@@ -44,11 +40,15 @@ const AddressModalComponent = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <AddressFormComponent closeModal={handleClose} />
+          <SelectAddressComponent
+            closeModal={handleClose}
+            amount={amount}
+            cartId={cartId}
+          />
         </Box>
       </Modal>
     </>
   );
 };
 
-export default AddressModalComponent;
+export default CheckoutModalComponent;

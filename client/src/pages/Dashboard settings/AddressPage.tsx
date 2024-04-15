@@ -39,17 +39,16 @@ const AddressPage = () => {
   console.log(addressList);
 
   return (
-    <Stack direction="column" sx={{ p: 2, width: 1 }} gap={2}>
+    <Stack direction="column" sx={{ p: 2, width: 1, overflow: "auto" }} gap={2}>
       <Typography variant="h5">AddressPage</Typography>
       <Stack direction="row" justifyContent="flex-end" sx={{ width: 1 }}>
         <AddressModalComponent />
       </Stack>
-      <Stack direction="column" gap={2}>
+      <Stack direction="row" gap={4}>
         {addressList?.data.map((address, index) => (
           <AddressCardComponent key={index} {...address} />
         ))}
       </Stack>
-      <Stack direction="row" gap={2}></Stack>
     </Stack>
   );
 };

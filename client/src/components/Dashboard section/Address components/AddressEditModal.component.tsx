@@ -16,22 +16,17 @@ const style = {
   p: 4,
 };
 
-const AddressModalComponent = () => {
+const AddressEditModalComponent = (address: any) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+//   console.log(address);
 
   return (
     <>
-      <Button
-        variant="outlined"
-        sx={{ width: "200px" }}
-        startIcon={<AddIcon />}
-        onClick={handleOpen}
-      >
-        Add address
+      <Button sx={{ textTransform: "none" }} onClick={handleOpen}>
+        Edit
       </Button>
-
       <Modal
         sx={{
           "& > .MuiBackdrop-root": {
@@ -44,11 +39,11 @@ const AddressModalComponent = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <AddressFormComponent closeModal={handleClose} />
+          <AddressFormComponent address={address} closeModal={handleClose} />
         </Box>
       </Modal>
     </>
   );
 };
 
-export default AddressModalComponent;
+export default AddressEditModalComponent;

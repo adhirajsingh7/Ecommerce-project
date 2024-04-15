@@ -1,5 +1,6 @@
 import { Button, Paper, Stack, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import CheckoutModalComponent from "./CheckoutModal.component";
 
 const CartCheckoutComponent = (props: any) => {
   const { products, _id: cart_id } = props;
@@ -15,12 +16,12 @@ const CartCheckoutComponent = (props: any) => {
     <Stack
       direction="column"
       gap={4}
-      sx={{ p: 4, maxHeight: "250px" }}
+      sx={{ p: 4, maxHeight: "300px" }}
       component={Paper}
     >
       <Typography variant="h4">Checkout</Typography>
       <Typography variant="body1">Total Amount - {amount}</Typography>
-      <Button variant="contained">Checkout</Button>
+      <CheckoutModalComponent amount={amount} cartId={cart_id} />
     </Stack>
   );
 };

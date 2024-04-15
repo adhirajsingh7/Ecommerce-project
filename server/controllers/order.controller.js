@@ -42,13 +42,18 @@ exports.get_order_by_id = async (req, res, next) => {
 
 exports.create_order = async (req, res, next) => {
   const { user_id, cart_id, address_id, total_amount } = req.body;
-
+  // console.log(req.body);
+  // const user_cart = await Cart.findById(cart_id);
+  // console.log(user_cart);
+  // return res.status(200).json("askdmlas");
   try {
     const user_cart = await Cart.findById(cart_id);
     console.log(user_cart);
 
     await user_cart.products.map(async (product_obj) => {
-      const product = await Product.findOne({ _id: product_obj.product });
+      const product = await Product.findOne({
+        _id: product_obj.product,
+      });
       product.stock = product.stock - product_obj.quantity;
       await product.save();
     });

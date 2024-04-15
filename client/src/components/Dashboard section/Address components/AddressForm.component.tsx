@@ -1,5 +1,5 @@
 import { Box, Button, FormHelperText, Stack, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import FormInputText from "../../Form components/FormInputText";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,13 +7,19 @@ import { TAddressSchema, addressSchema } from "../../../lib/type";
 import { LoadingButton } from "@mui/lab";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { address_type_options } from "../../../lib/constants";
-import { createAddress } from "../../../api/address.api";
+import { createAddress, updateAddress } from "../../../api/address.api";
 import { FormInputRadio } from "../../Form components/FormInputRadio";
 
-const AddressFormComponent = (props: any) => {
+interface propTypes {
+  address?: IAddress;
+  closeModal: () => void;
+}
+
+const AddressFormComponent = (props: propTypes) => {
   const userId = JSON.parse(localStorage.getItem("userId") || "");
-  const { closeModal } = props;
+  const { address, closeModal } = props;
   const queryClient = useQueryClient();
+  console.log(address);
 
   const {
     isPending,
@@ -27,7 +33,19 @@ const AddressFormComponent = (props: any) => {
     },
   });
 
-  const defaultValues = {
+  const {
+    isPending: isUpdatePending,
+    isError: isUpdateError,
+    error: updateError,
+    mutate: updateAddressMutation,
+  } = useMutation({
+    mutationFn: (updatedAddress) => updateAddress(address?._id, updatedAddress),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["address"] });
+    },
+  });
+
+  let defaultValues = {
     name: "",
     phone: "",
     pincode: "",
@@ -52,17 +70,39 @@ const AddressFormComponent = (props: any) => {
     resolver: zodResolver(addressSchema),
   });
 
+  useEffect(() => {
+    if (address) {
+      // reset({
+      //   name: address.name,
+      //   phone: address.phone,
+      //   pincode: address.pincode,
+      //   city: address.city,
+      //   state: address.state,
+      //   country: address.country,
+      //   locality: address.locality,
+      //   flat_no: address.flat_no,
+      //   landmark: address.landmark,
+      //   address_type: address.address_type,
+      // });
+      reset(address);
+    }
+  }, [address, reset]);
+
   const onSubmit: SubmitHandler<any> = async (data) => {
     console.log(data);
-    createAddressMutation(data);
+    if (address) {
+      updateAddressMutation(data);
+    } else {
+      createAddressMutation(data);
+    }
     reset();
     closeModal();
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Stack direction="column" gap={4} sx={{ minWidth: "600px" }}>
-        <Typography variant="h4">Add address</Typography>
+      <Stack direction="column" gap={2} sx={{ minWidth: "600px" }}>
+        <Typography variant="h4">{address ? "Edit" : "Add"} address</Typography>
         <Stack direction="column" gap={2}>
           <Typography variant="h6">Contact Info</Typography>
           <Stack direction="row" gap={2}>
@@ -153,7 +193,7 @@ const AddressFormComponent = (props: any) => {
             loadingPosition="center"
             variant="contained"
           >
-            <span>Create</span>
+            <span>{address ? "Edit" : "Create"}</span>
           </LoadingButton>
         </Stack>
       </Stack>

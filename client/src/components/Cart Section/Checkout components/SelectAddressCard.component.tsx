@@ -3,8 +3,7 @@ import { Box, Button, Divider, Paper, Stack, Typography } from "@mui/material";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import WorkOutlineOutlinedIcon from "@mui/icons-material/WorkOutlineOutlined";
 import PlaceOutlinedIcon from "@mui/icons-material/PlaceOutlined";
-import AddressModalComponent from "./AddressModal.component";
-import AddressEditModalComponent from "./AddressEditModal.component";
+import "./SelectAddressCard.styles.scss";
 
 const addressIcons = {
   home: <HomeOutlinedIcon />,
@@ -12,8 +11,10 @@ const addressIcons = {
   other: <PlaceOutlinedIcon />,
 };
 
-const AddressCardComponent = (address: any) => {
+const SelectAddressCardComponent = (props: any) => {
+  const { address, selectedAddress, setSelectedAddress } = props;
   const {
+    _id: addressId,
     name,
     phone,
     pincode,
@@ -28,10 +29,13 @@ const AddressCardComponent = (address: any) => {
 
   return (
     <Stack
+      //   className="selected-card"
+      className={selectedAddress === addressId ? "selected-card" : ""}
       direction="column"
       sx={{ p: 2, width: "400px" }}
       component={Paper}
       gap={1}
+      onClick={() => setSelectedAddress(addressId)}
     >
       <Stack direction="row" gap={2} alignItems="center">
         {addressIcons[address_type]}
@@ -44,15 +48,8 @@ const AddressCardComponent = (address: any) => {
       <Typography variant="body2">
         Phone: <span style={{ fontWeight: 600 }}>{phone}</span>
       </Typography>
-      <Divider />
-      <Stack direction="row">
-        <Button color="error" sx={{ textTransform: "none" }}>
-          Delete
-        </Button>
-        <AddressEditModalComponent {...address} />
-      </Stack>
     </Stack>
   );
 };
 
-export default AddressCardComponent;
+export default SelectAddressCardComponent;
