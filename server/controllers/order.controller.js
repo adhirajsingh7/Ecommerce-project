@@ -3,16 +3,18 @@ const { Order } = require("../models/order");
 const { Product } = require("../models/product");
 
 exports.get_orders = async (req, res, next) => {
-  let { page = 0, limit = 10 } = req.query;
+  let { page = 0, limit = 10, user_id = "" } = req.query;
   page = parseInt(page) || 0;
   limit = parseInt(limit) || 10;
 
   let offset = page * limit;
+  let criteria = {};
+  if (user_id) criteria.user_id = user_id;
 
   try {
-    const response = await Order.find({}, {}, { skip: offset, limit });
+    const response = await Order.find(criteria, {}, { skip: offset, limit });
 
-    const count = await Order.find({}).countDocuments();
+    const count = await Order.find(criteria).countDocuments();
 
     return res.status(200).send({
       total: count,
@@ -26,7 +28,17 @@ exports.get_orders = async (req, res, next) => {
   }
 };
 
-exports.get_order_by_id = async (req, res, next) => {};
+exports.get_order_by_id = async (req, res, next) => {
+  const { order_id } = req.params;
+  try {
+    const response = await Order.findOne({ _id: order_id });
+    if (!response) return res.status(404).json({ message: "Order not found" });
+    return res.status(200).send(response);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: error.message });
+  }
+};
 
 exports.create_order = async (req, res, next) => {
   const { user_id, cart_id, address_id, total_amount } = req.body;

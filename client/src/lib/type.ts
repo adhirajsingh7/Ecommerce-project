@@ -39,12 +39,19 @@ export const reviewSchema = z.object({
 
 export const addressSchema = z.object({
   name: z.string().trim().min(1, { message: "Name is required" }),
-  location: z.string().min(1, { message: "Location is required" }),
-  country: z.string().min(1, { message: "Country is required" }),
-  state: z.string().min(1, { message: "State is required" }),
+  phone: z
+    .string()
+    .regex(phoneRegex, { message: "Invalid phone number" })
+    .min(5, { message: "Phone must contain at least 5 characters" })
+    .max(16, { message: "Phone contain at most 16 characters" }),
+  pincode: z.coerce.number().gte(1, { message: "Pincode is required" }),
   city: z.string().min(1, { message: "City is required" }),
-  address: z.string().min(1, { message: "Address is required" }),
-  zip_code: z.coerce.number().gte(1, { message: "Zip code is required" }),
+  state: z.string().min(1, { message: "State is required" }),
+  country: z.string().min(1, { message: "Country is required" }),
+  locality: z.string().min(1, { message: "Locality/Area/Street is required" }),
+  flat_no: z.string().min(1, { message: "Flat no/Building Name is required" }),
+  landmark: z.string(),
+  address_type: z.enum(["home", "office", "other"]),
 });
 
 export const CountrySchema = z.object({

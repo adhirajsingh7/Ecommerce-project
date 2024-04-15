@@ -9,26 +9,42 @@ const address_schema = new Schema(
     },
     name: {
       type: String,
+      required: true,
     },
-    location: {
-      type: String,
-      // enum: ["home", "work", "other"],
-      // default: "other",
+    phone: {
+      type: Number,
+      required: true,
     },
-    country: {
-      type: String,
-    },
-    state: {
-      type: String,
+    pincode: {
+      type: Number,
+      required: true,
     },
     city: {
       type: String,
+      required: true,
     },
-    address: {
+    state: {
+      type: String,
+      required: true,
+    },
+    country: {
+      type: String,
+      required: true,
+    },
+    locality: {
+      type: String,
+      required: true,
+    },
+    flat_no: {
+      type: String,
+      required: true,
+    },
+    landmark: {
       type: String,
     },
-    zip_code: {
+    address_type: {
       type: String,
+      enum: ["home", "office", "other"],
     },
   },
   {
