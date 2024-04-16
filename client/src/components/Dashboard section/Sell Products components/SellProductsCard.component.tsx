@@ -1,6 +1,5 @@
-import { Box, Button, Stack, Typography } from "@mui/material";
 import React from "react";
-import demoImage from "../../../assets/images/icecream-image.jpg";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import "./SellProductsCard.styles.scss";
 import { useNavigate } from "react-router-dom";
 
@@ -8,9 +7,7 @@ const SellProductsCardComponent = (product: IProduct) => {
   const navigate = useNavigate();
 
   const handleView = (id: string) => {
-    if (id) {
-      navigate(`/product/${id}`);
-    }
+    navigate(`/product/${id}`);
   };
   return (
     <Stack
@@ -25,7 +22,7 @@ const SellProductsCardComponent = (product: IProduct) => {
     >
       <img
         className="card-image"
-        src={product.image || demoImage}
+        src={product.image}
         alt=""
         style={{
           maxHeight: "50%",
@@ -37,7 +34,7 @@ const SellProductsCardComponent = (product: IProduct) => {
       />
       <Stack direction="column" sx={{ p: 2 }} gap={1}>
         <Typography variant="h5" fontWeight={600}>
-          {product.name || "Vanila ice cream"}
+          {product.name}
         </Typography>
         <Typography
           variant="body1"
@@ -48,8 +45,7 @@ const SellProductsCardComponent = (product: IProduct) => {
             whiteSpace: "nowrap",
           }}
         >
-          {product.description ||
-            "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Inventore dasdasdasdasdasdasd asd sad sa dsa dasdas  asdsad as dasd asd asd asd asd das dasd asd as dsa d"}
+          {product.description}
         </Typography>
         <Stack
           direction="row"
@@ -58,7 +54,7 @@ const SellProductsCardComponent = (product: IProduct) => {
           gap={2}
         >
           <Typography variant="h4" fontWeight={600}>
-            ${product.price || "10"}
+            ${product.price}
           </Typography>
           <Button
             variant="contained"
