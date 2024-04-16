@@ -12,7 +12,11 @@ exports.get_orders = async (req, res, next) => {
   if (user_id) criteria.user_id = user_id;
 
   try {
-    const response = await Order.find(criteria, {}, { skip: offset, limit });
+    const response = await Order.find(
+      criteria,
+      {},
+      { skip: offset, limit }
+    ).populate("destination");
 
     const count = await Order.find(criteria).countDocuments();
 
@@ -42,13 +46,23 @@ exports.get_order_by_id = async (req, res, next) => {
 
 exports.create_order = async (req, res, next) => {
   const { user_id, cart_id, address_id, total_amount } = req.body;
-  // console.log(req.body);
-  // const user_cart = await Cart.findById(cart_id);
-  // console.log(user_cart);
-  // return res.status(200).json("askdmlas");
+
   try {
-    const user_cart = await Cart.findById(cart_id);
-    console.log(user_cart);
+    const user_cart = await Cart.findById(cart_id).populate("products.product");
+
+    const cart_products = user_cart.products.map(
+      ({ product, quantity, total_price }) => {
+        const { _id, name, image, category } = product;
+        return {
+          product_id: _id,
+          name,
+          category,
+          image,
+          quantity,
+          total_price,
+        };
+      }
+    );
 
     await user_cart.products.map(async (product_obj) => {
       const product = await Product.findOne({
@@ -60,7 +74,7 @@ exports.create_order = async (req, res, next) => {
 
     const response = await Order.create({
       user_id: user_id,
-      cart: cart_id,
+      products: cart_products,
       destination: address_id,
       total_amount: total_amount,
     });

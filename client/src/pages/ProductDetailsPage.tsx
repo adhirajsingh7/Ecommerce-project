@@ -149,41 +149,9 @@ const ProductDetailsPage = () => {
             </Stack>
             <Divider />
           </Stack>
-          <Stack direction="row" gap={6}>
-            {productInCart ? (
-              <Button
-                variant="outlined"
-                size="large"
-                color="secondary"
-                sx={{
-                  "&.MuiButton-root": {
-                    borderRadius: "30px",
-                    width: "300px",
-                    height: "60px",
-                  },
-                }}
-                startIcon={<ShoppingCartOutlinedIcon />}
-                onClick={handleViewCart}
-              >
-                View in Cart
-              </Button>
-            ) : (
-              <>
-                <Button
-                  variant="contained"
-                  size="large"
-                  color="secondary"
-                  sx={{
-                    "&.MuiButton-root": {
-                      borderRadius: "30px",
-                      width: "300px",
-                      height: "60px",
-                    },
-                  }}
-                  onClick={handleBuyNow}
-                >
-                  Buy now
-                </Button>
+          {product.stock > 0 ? (
+            <Stack direction="row" gap={6}>
+              {productInCart ? (
                 <Button
                   variant="outlined"
                   size="large"
@@ -196,13 +164,51 @@ const ProductDetailsPage = () => {
                     },
                   }}
                   startIcon={<ShoppingCartOutlinedIcon />}
-                  onClick={handleAddToCart}
+                  onClick={handleViewCart}
                 >
-                  Add to cart
+                  View in Cart
                 </Button>
-              </>
-            )}
-          </Stack>
+              ) : (
+                <>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    color="secondary"
+                    sx={{
+                      "&.MuiButton-root": {
+                        borderRadius: "30px",
+                        width: "300px",
+                        height: "60px",
+                      },
+                    }}
+                    onClick={handleBuyNow}
+                  >
+                    Buy now
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    size="large"
+                    color="secondary"
+                    sx={{
+                      "&.MuiButton-root": {
+                        borderRadius: "30px",
+                        width: "300px",
+                        height: "60px",
+                      },
+                    }}
+                    startIcon={<ShoppingCartOutlinedIcon />}
+                    onClick={handleAddToCart}
+                  >
+                    Add to cart
+                  </Button>
+                </>
+              )}
+            </Stack>
+          ) : (
+            <Typography variant="h3" textAlign="center" color="error">
+              Out of stock
+            </Typography>
+          )}
         </Stack>
       </Stack>
       <ReviewsComponent />

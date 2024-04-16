@@ -19,7 +19,7 @@ import "./DashboardSidebar.styles.scss";
 
 const DashboardSidebar = () => {
   const dashboard_sidebar_options = [
-    { label: "Profile", slug: "profile", icon: PersonIcon },
+    { label: "Account", slug: "account", icon: PersonIcon },
     { label: "Addresses", slug: "addresses", icon: HomeIcon },
     { label: "View Orders", slug: "view-orders", icon: ShoppingBagIcon },
     { label: "Sell Products", slug: "sell-products", icon: SellIcon },

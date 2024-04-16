@@ -1,20 +1,26 @@
 import React, { useState } from "react";
 import { Box, Button, Stack, Typography } from "@mui/material";
-import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchAddresses } from "../../../api/address.api";
 import SelectAddressCardComponent from "./SelectAddressCard.component";
 import { createOrder } from "../../../api/order.api";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const SelectAddressComponent = (props: any) => {
   const { closeModal, amount, cartId } = props;
   const userId = JSON.parse(localStorage.getItem("userId") || "");
+  const navigate = useNavigate();
 
   const queryClient = useQueryClient();
   const { mutate } = useMutation({
     mutationFn: (order) => createOrder(order),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      queryClient.invalidateQueries({
+        queryKey: ["orders", "cart", "products"],
+      });
+      navigate("/");
+      toast.success("Order placed successfully!");
     },
   });
 

@@ -1,14 +1,15 @@
-import { Box, Button, Stack, Typography } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
 import React from "react";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import AddressCardComponent from "../../components/Dashboard section/Address components/AddressCard.component";
 import AddressModalComponent from "../../components/Dashboard section/Address components/AddressModal.component";
 import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
-import { useQuery } from "@tanstack/react-query";
-import { fetchAddresses } from "../../api/address.api";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { fetchAddresses, deleteAddress } from "../../api/address.api";
+import { toast } from "react-toastify";
 
 const AddressPage = () => {
   const userId = JSON.parse(localStorage.getItem("userId") || "");
+  const queryClient = useQueryClient();
 
   const {
     isPending,
@@ -19,6 +20,18 @@ const AddressPage = () => {
     queryKey: ["address"],
     queryFn: () => fetchAddresses({ userId }),
   });
+
+  const { mutate: deleteAddressMutation } = useMutation({
+    mutationFn: (addressId: string) => deleteAddress(addressId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["address"] });
+      toast.success("Address deleted succesfully");
+    },
+  });
+
+  const handleDelete = (addressId: string) => {
+    deleteAddressMutation(addressId);
+  };
 
   if (isPending) {
     return (
@@ -46,7 +59,11 @@ const AddressPage = () => {
       </Stack>
       <Stack direction="row" gap={4}>
         {addressList?.data.map((address, index) => (
-          <AddressCardComponent key={index} {...address} />
+          <AddressCardComponent
+            key={index}
+            address={address}
+            handleDelete={handleDelete}
+          />
         ))}
       </Stack>
     </Stack>

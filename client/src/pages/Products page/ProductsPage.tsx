@@ -25,7 +25,6 @@ import ProductCardComponent from "../../components/Product card/ProductCard.comp
 import SellProductsCardComponent from "../../components/Dashboard section/Sell Products components/SellProductsCard.component";
 import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 import ProductsFilterComponent from "../../components/Products section/ProductsFilter.component";
-import { NewProductCard } from "../../components/Products section/Product card/NewProductCard.component";
 import ProductsSortComponent from "../../components/Products section/ProductsSort.component";
 
 const ProductsPage = () => {
@@ -159,13 +158,6 @@ const ProductsPage = () => {
             <>
               <Stack direction="row" flexWrap="wrap" gap={3}>
                 {productsList?.data?.map((product: IProduct, index) => (
-                  // <NewProductCard
-                  //   key={index}
-                  //   image={product.image}
-                  //   title={product.name}
-                  //   discountedPrice={product.price}
-                  //   originalPrice={product.stock}
-                  // />
                   <SellProductsCardComponent key={index} {...product} />
                 ))}
               </Stack>
