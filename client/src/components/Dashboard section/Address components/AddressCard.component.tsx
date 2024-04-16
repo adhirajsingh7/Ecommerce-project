@@ -12,8 +12,10 @@ const addressIcons = {
   other: <PlaceOutlinedIcon />,
 };
 
-const AddressCardComponent = (address: any) => {
+const AddressCardComponent = (props: any) => {
+  const { address, handleDelete } = props;
   const {
+    _id: addressId,
     name,
     phone,
     pincode,
@@ -46,7 +48,11 @@ const AddressCardComponent = (address: any) => {
       </Typography>
       <Divider />
       <Stack direction="row">
-        <Button color="error" sx={{ textTransform: "none" }}>
+        <Button
+          color="error"
+          sx={{ textTransform: "none" }}
+          onClick={() => handleDelete(addressId)}
+        >
           Delete
         </Button>
         <AddressEditModalComponent {...address} />

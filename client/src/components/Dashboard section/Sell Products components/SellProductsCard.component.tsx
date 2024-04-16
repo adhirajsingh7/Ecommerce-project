@@ -39,9 +39,17 @@ const SellProductsCardComponent = (product: IProduct) => {
         <Typography variant="h5" fontWeight={600}>
           {product.name || "Vanila ice cream"}
         </Typography>
-        <Typography variant="body1" sx={{ textOverflow: "hidden" }}>
+        <Typography
+          variant="body1"
+          sx={{
+            height: "50px",
+            textOverflow: "ellipsis",
+            overflow: "hidden",
+            whiteSpace: "nowrap",
+          }}
+        >
           {product.description ||
-            "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Inventore"}
+            "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Inventore dasdasdasdasdasdasd asd sad sa dsa dasdas  asdsad as dasd asd asd asd asd das dasd asd as dsa d"}
         </Typography>
         <Stack
           direction="row"

@@ -20,7 +20,7 @@ const CartCheckoutComponent = (props: any) => {
       component={Paper}
     >
       <Typography variant="h4">Checkout</Typography>
-      <Typography variant="body1">Total Amount - {amount}</Typography>
+      <Typography variant="body1">Total Amount - <span style={{fontWeight: 600}}>${amount}</span></Typography>
       <CheckoutModalComponent amount={amount} cartId={cart_id} />
     </Stack>
   );

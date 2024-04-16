@@ -25,6 +25,7 @@ const ProductsSortComponent = (props: any) => {
       <Box sx={{ minWidth: 120 }}>
         <FormControl fullWidth>
           <Select
+            size="small"
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             value={sortProducts}

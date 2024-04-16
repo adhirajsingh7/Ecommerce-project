@@ -6,9 +6,8 @@ const order_schema = new Schema({
     ref: "User",
     required: true,
   },
-  cart: {
-    type: Schema.Types.ObjectId,
-    ref: "Cart",
+  products: {
+    type: Schema.Types.Mixed,
     required: true,
   },
   destination: {
