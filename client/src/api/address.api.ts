@@ -22,24 +22,6 @@ export const fetchAddressById = async (addressId: string) => {
   }
 };
 
-export const createAddress = async (userId: string, address: any) => {
-  try {
-    const response = await axios.post(`/addresses/${userId}`, address);
-    return response?.data;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const updateAddress = async (addressId: string, address: any) => {
-  try {
-    const { data } = await axios.put(`/addresses/${addressId}`, address);
-    return data;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 export const deleteAddress = async (addressId: string) => {
   try {
     const { data } = await axios.delete(`/addresses/${addressId}`);

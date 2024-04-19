@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
-import LoaderComponent from "../components/Loader";
 import { fetchProductById, updateProduct } from "../api/product.api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -16,6 +15,7 @@ import {
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import ReviewsComponent from "../components/Reviews section/Reviews.component";
 import { addProductToCart } from "../api/cart.api";
+import { Loading } from "@/components/Loading";
 
 const ProductDetailsPage = () => {
   const params = useParams();
@@ -57,7 +57,7 @@ const ProductDetailsPage = () => {
 
   const userId = JSON.parse(localStorage.getItem("userId") || "");
 
-  if (isPending) return <LoaderComponent />;
+  if (isPending) return <Loading />;
 
   if (isError) return <span>Error: {error.message}</span>;
   // console.log(product);

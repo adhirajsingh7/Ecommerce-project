@@ -1,51 +1,30 @@
-import { Box, Button, FormHelperText, Stack, Typography } from "@mui/material";
 import React, { useEffect } from "react";
+import { Box, Button, FormHelperText, Stack, Typography } from "@mui/material";
 import FormInputText from "../../Form components/FormInputText";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TAddressSchema, addressSchema } from "../../../lib/type";
 import { LoadingButton } from "@mui/lab";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { address_type_options } from "../../../lib/constants";
-import { createAddress, updateAddress } from "../../../api/address.api";
 import { FormInputRadio } from "../../Form components/FormInputRadio";
-
+import { useCreateAddress } from "@/features/address/api/createAddress";
+import { useUpdateAddress } from "@/features/address/api/updateAddress";
 interface propTypes {
   address?: IAddress;
   closeModal: () => void;
 }
 
-const AddressFormComponent = (props: propTypes) => {
+export const AddressFormComponent = (props: propTypes) => {
   const userId = JSON.parse(localStorage.getItem("userId") || "");
   const { address, closeModal } = props;
-  const queryClient = useQueryClient();
   console.log(address);
 
-  const {
-    isPending,
-    isError,
-    error,
-    mutate: createAddressMutation,
-  } = useMutation({
-    mutationFn: (address) => createAddress(userId, address),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["address"] });
-    },
-  });
+  const { isPending, mutate: createAddressMutation } = useCreateAddress(userId);
 
-  const {
-    isPending: isUpdatePending,
-    isError: isUpdateError,
-    error: updateError,
-    mutate: updateAddressMutation,
-  } = useMutation({
-    mutationFn: (updatedAddress) => updateAddress(address?._id, updatedAddress),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["address"] });
-    },
-  });
+  const { isPending: isUpdatePending, mutate: updateAddressMutation } =
+    useUpdateAddress(address?._id);
 
-  let defaultValues = {
+  const defaultValues = {
     name: "",
     phone: "",
     pincode: "",
@@ -72,18 +51,6 @@ const AddressFormComponent = (props: propTypes) => {
 
   useEffect(() => {
     if (address) {
-      // reset({
-      //   name: address.name,
-      //   phone: address.phone,
-      //   pincode: address.pincode,
-      //   city: address.city,
-      //   state: address.state,
-      //   country: address.country,
-      //   locality: address.locality,
-      //   flat_no: address.flat_no,
-      //   landmark: address.landmark,
-      //   address_type: address.address_type,
-      // });
       reset(address);
     }
   }, [address, reset]);
@@ -189,7 +156,7 @@ const AddressFormComponent = (props: propTypes) => {
           </Button>
           <LoadingButton
             type="submit"
-            loading={isPending}
+            loading={isPending || isUpdatePending}
             loadingPosition="center"
             variant="contained"
           >
@@ -200,5 +167,3 @@ const AddressFormComponent = (props: propTypes) => {
     </form>
   );
 };
-
-export default AddressFormComponent;
