@@ -47,6 +47,22 @@ export const address_type_options = [
   },
 ];
 
+export const productTableColumns = [
+  "",
+  "Product",
+  "Category",
+  "Price",
+  "Stock",
+  "Action",
+];
+
+export const orderTableColumns = [
+  "Order id",
+  "Status",
+  "Total amount",
+  "Action",
+];
+
 export const MAX_UPLOAD_SIZE = 1024 * 1024 * 5; // 5mb
 export const ACCEPTED_IMAGE_TYPES = [
   "image/jpeg",

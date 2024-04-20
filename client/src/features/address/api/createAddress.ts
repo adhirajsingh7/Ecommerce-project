@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export const createAddress = async (userId: string, address: any) => {
   try {
@@ -17,6 +18,7 @@ export const useCreateAddress = (userId: string) => {
     mutationFn: (address) => createAddress(userId, address),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["address"] });
+      toast.success("Address added succesfully");
     },
   });
 };

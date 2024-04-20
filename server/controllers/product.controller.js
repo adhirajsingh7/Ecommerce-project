@@ -99,11 +99,28 @@ exports.create_product = async (req, res, next) => {
 
 exports.update_product = async (req, res, next) => {
   const { product_id } = req.params;
-  const product = req.body;
+  let updated_product = req.body;
+
+  let image_local_path;
+  if (
+    req.files &&
+    Array.isArray(req.files.image) &&
+    req.files.image.length > 0
+  ) {
+    image_local_path = req.files.image[0].path;
+  }
+
   try {
+    const image = await upload_on_cloudinary(image_local_path);
+    if (image) {
+      updated_product.image = image.url;
+    } else {
+      delete updated_product["image"];
+    }
+
     const response = await Product.findOneAndUpdate(
       { _id: product_id },
-      product
+      updated_product
     );
     res.status(200).json({ message: "Product updated successfully." });
   } catch (error) {

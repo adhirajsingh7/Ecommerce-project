@@ -4,13 +4,13 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useNavigate } from "react-router-dom";
 import { Badge, Button, Stack } from "@mui/material";
+import shoppingIcon from "../../assets/icons/shopping-icon.svg";
 
-const NavbarComponent = (props: any) => {
+export const NavbarComponent = (props: any) => {
   const { userCart } = props;
 
   let total_quantity = 0;
@@ -38,15 +38,12 @@ const NavbarComponent = (props: any) => {
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static" sx={{ bgcolor: "#000000" }}>
           <Toolbar>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2 }}
-            >
-              <MenuIcon />
-            </IconButton>
+            <img
+              src={shoppingIcon}
+              alt=""
+              style={{ height: "40px", width: "40px", objectFit: "cover" }}
+            />
+
             <Typography
               variant="h6"
               component="div"
@@ -77,5 +74,3 @@ const NavbarComponent = (props: any) => {
     </>
   );
 };
-
-export default NavbarComponent;

@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export const updateAddress = async (
   addressId: string | undefined,
@@ -20,18 +21,7 @@ export const useUpdateAddress = (addressId: string | undefined) => {
     mutationFn: (updatedAddress) => updateAddress(addressId, updatedAddress),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["address"] });
+      toast.success("Address updated succesfully");
     },
   });
 };
-
-// const {
-//   isPending: isUpdatePending,
-//   isError: isUpdateError,
-//   error: updateError,
-//   mutate: updateAddressMutation,
-// } = useMutation({
-//   mutationFn: (updatedAddress) => updateAddress(address?._id, updatedAddress),
-//   onSuccess: () => {
-//     queryClient.invalidateQueries({ queryKey: ["address"] });
-//   },
-// });

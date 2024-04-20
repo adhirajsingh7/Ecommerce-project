@@ -1,14 +1,7 @@
 import React from "react";
-import NormalForm from "./pages/NormalForm";
-import ReactHookForm from "./pages/ReactHookForm";
 
 const App = () => {
-  return (
-    <>
-      {/* <NormalForm /> */}
-      <ReactHookForm />
-    </>
-  );
+  return <div>App</div>;
 };
 
 export default App;

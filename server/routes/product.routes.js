@@ -17,24 +17,30 @@ const transporter = nodemailer.createTransport({
 
 const mailOptions = {
   from: {
-    name : "Ecommerce company",
-    address: process.env.NODEMAILER_USER
-  }, 
+    name: "Ecommerce company",
+    address: process.env.NODEMAILER_USER,
+  },
   to: ["adhiraj.thakurr707@gmail.com"],
   subject: "Order confirmation",
-  text: "ORDER IS CONFIRMED", 
-  html: "<b>ORDER IS CONFIRMED IN HTML PART</b>", 
-}
+  text: "ORDER IS CONFIRMED",
+  html: "<b>ORDER IS CONFIRMED IN HTML PART</b>",
+};
 
 router
   .route("/")
   .get(product_controller.get_products)
-  .post(upload.fields([{ name: "image", maxCount: 1 }]),product_controller.create_product);
+  .post(
+    upload.fields([{ name: "image", maxCount: 1 }]),
+    product_controller.create_product
+  );
 
 router
   .route("/:product_id")
   .get(product_controller.get_product_by_id)
-  .put(product_controller.update_product)
+  .put(
+    upload.fields([{ name: "image", maxCount: 1 }]),
+    product_controller.update_product
+  )
   .delete(product_controller.delete_product);
 
 // router.route("/mail").get(async(req, res)=>{

@@ -1,28 +1,17 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
-import { fetchProductById, updateProduct } from "../api/product.api";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  Box,
-  Button,
-  Chip,
-  Divider,
-  Rating,
-  Stack,
-  Typography,
-} from "@mui/material";
-import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import ReviewsComponent from "../components/Reviews section/Reviews.component";
-import { addProductToCart } from "../api/cart.api";
+import { Button, Chip, Divider, Stack, Typography } from "@mui/material";
+import { useGetProductById } from "@/features/products/api/getProductById";
+import { ReviewsComponent } from "@/components/Reviews";
+import { useAddToCart } from "@/features/cart/api/addToCart";
 import { Loading } from "@/components/Loading";
+import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 
 const ProductDetailsPage = () => {
-  const params = useParams();
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
+  const params = useParams();
   const userCart = useOutletContext();
-  // console.log(userCart)
+  const userId = JSON.parse(localStorage.getItem("userId") || "");
 
   let productInCart = false;
   userCart[0]?.products.forEach((product) => {
@@ -30,40 +19,13 @@ const ProductDetailsPage = () => {
       productInCart = true;
     }
   });
-  console.log(productInCart);
 
-  const {
-    isPending,
-    isError,
-    error,
-    data: product,
-  } = useQuery<IProduct>({
-    queryKey: ["products"],
-    queryFn: () => fetchProductById(params.product_id),
-  });
-
-  const {
-    isPending: isAddProductPending,
-    isError: isAddProductError,
-    error: addProductError,
-    mutate,
-  } = useMutation({
-    mutationFn: (updatedProduct) => addProductToCart(userId, updatedProduct),
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["cart"] });
-      console.log(data);
-    },
-  });
-
-  const userId = JSON.parse(localStorage.getItem("userId") || "");
+  const { isPending, data: product } = useGetProductById(params.product_id);
+  const { mutate } = useAddToCart(userId);
 
   if (isPending) return <Loading />;
 
-  if (isError) return <span>Error: {error.message}</span>;
-  // console.log(product);
-
   const handleAddToCart = () => {
-    // console.log(product);
     const updatedProduct = {
       product: product._id,
       quantity: 1,
@@ -96,20 +58,19 @@ const ProductDetailsPage = () => {
         sx={{ height: "calc(100vh- 64px)", width: 1, p: 2 }}
       >
         <img
-          src={product.image}
+          src={product?.image}
           alt=""
           style={{
             height: "600px",
             width: "600px",
             objectFit: "contain",
-            //   border: "1px solid black",
             borderRadius: "10%",
             backgroundColor: "#f5f6f6",
           }}
         />
         <Stack direction="column" gap={2} sx={{ p: 2, width: 1 / 2 }}>
-          <Typography variant="h2">{product.name}</Typography>
-          <Typography variant="body1">{product.description}</Typography>
+          <Typography variant="h2">{product?.name}</Typography>
+          <Typography variant="body1">{product?.description}</Typography>
           <Stack direction="column" gap={4}>
             <Divider />
             <Stack
@@ -117,7 +78,7 @@ const ProductDetailsPage = () => {
               alignItems="center"
               justifyContent="space-around"
             >
-              <Typography variant="h4">$ {product.price}</Typography>
+              <Typography variant="h4">$ {product?.price}</Typography>
               <Stack direction="row" gap={2}>
                 <Chip
                   label="Category"
@@ -126,7 +87,7 @@ const ProductDetailsPage = () => {
                   color="primary"
                 />
                 <Chip
-                  label={product.category}
+                  label={product?.category}
                   variant="outlined"
                   size="medium"
                   color="primary"
@@ -140,7 +101,7 @@ const ProductDetailsPage = () => {
                   color="success"
                 />
                 <Chip
-                  label={product.stock}
+                  label={product?.stock}
                   variant="outlined"
                   size="medium"
                   color="success"
@@ -149,7 +110,7 @@ const ProductDetailsPage = () => {
             </Stack>
             <Divider />
           </Stack>
-          {product.stock > 0 ? (
+          {product?.stock > 0 ? (
             <Stack direction="row" gap={6}>
               {productInCart ? (
                 <Button

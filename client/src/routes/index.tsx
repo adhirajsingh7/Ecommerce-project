@@ -1,19 +1,30 @@
-import { Navigate, createBrowserRouter } from "react-router-dom";
-import SignupPage from "../pages/SignupPage";
-import HomePage from "../pages/HomePage";
-import ProductDetailsPage from "../pages/ProductDetailsPage";
-import LoginPage from "../pages/Login page/LoginPage";
-import CartPage from "../pages/Cart page/CartPage";
-import NavbarLayout from "../layout/Navbar layout/Navbar.layout";
-import DashboardPage from "../pages/Dashboard page/DashboardPage";
-import AddressPage from "../pages/Dashboard settings/AddressPage";
-import ProfilePage from "../pages/Dashboard settings/ProfilePage";
-import MerchantsPage from "../pages/Dashboard settings/MerchantsPage";
-import OrdersPage from "../pages/Dashboard settings/OrdersPage";
-import SellProductsPage from "../pages/Dashboard settings/SellProductsPage";
-import ProductsPage from "../pages/Products page/ProductsPage";
+import { createBrowserRouter } from "react-router-dom";
+import { lazy } from "react";
+
+import { DashboardLayout, NavbarLayout } from "@/layout";
+const CartPage = lazy(() => import("@/pages/Cart/CartPage"));
+const AddressPage = lazy(() => import("@/pages/Dashboard/AddressPage"));
+const MerchantsPage = lazy(() => import("@/pages/Dashboard/MerchantsPage"));
+const OrdersPage = lazy(() => import("@/pages/Dashboard/OrdersPage"));
+const ProfilePage = lazy(() => import("@/pages/Dashboard/ProfilePage"));
+const SellProductsPage = lazy(
+  () => import("@/pages/Dashboard/SellProductsPage")
+);
+const HomePage = lazy(() => import("@/pages/HomePage"));
+const LoginPage = lazy(() => import("@/pages/Login/LoginPage"));
+const ProductDetailsPage = lazy(() => import("@/pages/ProductDetailsPage"));
+const ProductsPage = lazy(() => import("@/pages/Products/ProductsPage"));
+const SignupPage = lazy(() => import("@/pages/SignupPage"));
 
 const router = createBrowserRouter([
+  {
+    path: "/login",
+    element: <LoginPage />,
+  },
+  {
+    path: "/signup",
+    element: <SignupPage />,
+  },
   {
     path: "/",
     element: <NavbarLayout />,
@@ -36,7 +47,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/dashboard",
-        element: <DashboardPage />,
+        element: <DashboardLayout />,
         children: [
           {
             path: "addresses",
@@ -61,14 +72,6 @@ const router = createBrowserRouter([
         ],
       },
     ],
-  },
-  {
-    path: "/login",
-    element: <LoginPage />,
-  },
-  {
-    path: "/signup",
-    element: <SignupPage />,
   },
 ]);
 
