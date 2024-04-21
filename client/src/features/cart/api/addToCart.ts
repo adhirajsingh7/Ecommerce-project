@@ -2,20 +2,20 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import axios from "axios";
 
-export const addProductToCart = async (userId: string, product: any) => {
+export const addProductToCart = async (product: any) => {
   try {
-    const { data } = await axios.post(`/cart/${userId}`, product);
+    const { data } = await axios.post("/cart", product);
     return data;
   } catch (error) {
     console.log(error);
   }
 };
 
-export const useAddToCart = (userId: string) => {
+export const useAddToCart = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (updatedProduct) => addProductToCart(userId, updatedProduct),
+    mutationFn: (updatedProduct) => addProductToCart(updatedProduct),
     onSuccess: (data) => {
       console.log(data);
       queryClient.invalidateQueries({ queryKey: ["cart"] });

@@ -48,7 +48,7 @@ const SellProductsPage = () => {
   const { isPending: isDeletePending, mutate: deleteProductMutation } =
     useDeleteProduct();
 
-  console.log(productsList);
+  // console.log(productsList);
   if (isPending) {
     return (
       <Stack
@@ -145,8 +145,8 @@ const SellProductsPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {productsList.data.length > 0 ? (
-                productsList.data.map((row) => (
+              {productsList?.data?.data.length > 0 ? (
+                productsList?.data?.data.map((row) => (
                   <TableRow
                     key={row._id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -195,11 +195,11 @@ const SellProductsPage = () => {
           </Table>
         </TableContainer>
         <Stack direction="row" justifyContent="flex-end">
-          {productsList?.data?.length !== 0 && (
+          {productsList?.data?.data?.length !== 0 && (
             <TablePagination
               component="div"
               rowsPerPageOptions={[5, 10, 25, 50, 100]}
-              count={productsList.total}
+              count={productsList?.data?.total}
               page={page}
               onPageChange={handleChangePage}
               rowsPerPage={rowsPerPage}

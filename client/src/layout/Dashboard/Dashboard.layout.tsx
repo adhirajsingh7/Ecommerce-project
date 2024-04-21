@@ -6,9 +6,9 @@ import { DashboardSidebar } from "@/components/Dashboard";
 export const DashboardLayout = () => {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    navigate("/dashboard/account");
-  }, []);
+  // useEffect(() => {
+  //   navigate("/dashboard/account");
+  // }, []);
 
   return (
     <Stack

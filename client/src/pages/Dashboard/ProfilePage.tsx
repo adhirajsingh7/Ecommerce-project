@@ -1,6 +1,4 @@
 import React from "react";
-import { useQuery } from "@tanstack/react-query";
-import { fetchUserById } from "../../api/user.api";
 import { Stack } from "@mui/material";
 import {
   AvatarUploadComponent,
@@ -8,19 +6,13 @@ import {
   PersonalDetailsComponent,
 } from "@/components/Profile";
 import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
+import { useGetUser } from "@/features/auth/api/getUser";
 
 const ProfilePage = () => {
-  const userId = JSON.parse(localStorage.getItem("userId") || "");
-
+  const { isPending, data } = useGetUser();
   const {
-    isPending,
-    isError,
-    error,
-    data: user,
-  } = useQuery({
-    queryKey: ["user"],
-    queryFn: () => fetchUserById(userId),
-  });
+    data: { user },
+  } = data;
 
   if (isPending) {
     return (
@@ -34,7 +26,7 @@ const ProfilePage = () => {
     <Stack direction="column" gap={2} sx={{ p: 2, overflow: "auto" }}>
       <AvatarUploadComponent {...user} />
       <PersonalDetailsComponent {...user} />
-      <ChangePasswordComponent userId={user._id} />
+      {user.password && <ChangePasswordComponent userId={user._id} />}
     </Stack>
   );
 };

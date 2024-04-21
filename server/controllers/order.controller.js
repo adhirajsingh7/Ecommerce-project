@@ -3,13 +3,14 @@ const { Order } = require("../models/order");
 const { Product } = require("../models/product");
 
 exports.get_orders = async (req, res, next) => {
-  let { page = 0, limit = 10, user_id = "" } = req.query;
+  let { page = 0, limit = 10 } = req.query;
   page = parseInt(page) || 0;
   limit = parseInt(limit) || 10;
 
   let offset = page * limit;
   let criteria = {};
-  if (user_id) criteria.user_id = user_id;
+  // if (user_id) criteria.user_id = user_id;
+  criteria.user_id = req.user._id;
 
   try {
     const response = await Order.find(
@@ -45,7 +46,8 @@ exports.get_order_by_id = async (req, res, next) => {
 };
 
 exports.create_order = async (req, res, next) => {
-  const { user_id, cart_id, address_id, total_amount } = req.body;
+  const user_id = req.user._id;
+  const { cart_id, address_id, total_amount } = req.body;
 
   try {
     const user_cart = await Cart.findById(cart_id).populate("products.product");

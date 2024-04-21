@@ -83,12 +83,3 @@ export const deleteUser = async (userId: string) => {
     console.log(error);
   }
 };
-
-export const loginUser = async (user: any) => {
-  try {
-    const { data } = await axios.post("/users/login", user);
-    return data;
-  } catch (error) {
-    console.log(error);
-  }
-};

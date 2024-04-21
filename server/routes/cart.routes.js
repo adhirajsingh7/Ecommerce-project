@@ -1,9 +1,11 @@
 const router = require("express").Router();
 const { cart_controller } = require("../controllers");
+const { is_authenticated } = require("../middlewares/auth");
 
-router.route("/").get(cart_controller.get_all_carts);
-
-router.route("/:user_id").post(cart_controller.add_product);
+router
+  .route("/")
+  .get(is_authenticated, cart_controller.get_all_carts)
+  .post(is_authenticated, cart_controller.add_product);
 
 router
   .route("/:cart_id")

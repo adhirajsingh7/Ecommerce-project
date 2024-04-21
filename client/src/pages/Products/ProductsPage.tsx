@@ -126,16 +126,16 @@ const ProductsPage = () => {
           {!isPending ? (
             <>
               <Stack direction="row" flexWrap="wrap" gap={3}>
-                {productsList?.data?.map((product: IProduct, index) => (
+                {productsList?.data.data?.map((product: IProduct, index) => (
                   <ProductCard key={index} {...product} />
                 ))}
               </Stack>
               <Stack direction="row" justifyContent="center">
-                {productsList?.data?.length !== 0 ? (
+                {productsList?.data?.data?.length !== 0 ? (
                   <TablePagination
                     component="div"
                     rowsPerPageOptions={[5, 10, 25, 50, 100]}
-                    count={productsList.total}
+                    count={productsList?.data?.total}
                     page={page}
                     onPageChange={handleChangePage}
                     rowsPerPage={rowsPerPage}

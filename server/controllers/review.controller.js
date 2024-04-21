@@ -10,16 +10,23 @@ exports.get_reviews = async (req, res, next) => {
   if (product_id) criteria.product_id = product_id;
 
   try {
-    const response = await Review.find(criteria, {}, { skip: offset, limit }).populate("user_id", "full_name");
+    const response = await Review.find(
+      criteria,
+      {},
+      { skip: offset, limit }
+    ).populate("user_id", "full_name");
 
-    const all_reviews = await Review.find(criteria).select({rating: 1, _id: 0});
+    const all_reviews = await Review.find(criteria).select({
+      rating: 1,
+      _id: 0,
+    });
 
     return res.status(200).send({
       total: all_reviews.length,
       total_page: Math.ceil(all_reviews.length / limit),
       current_page: page,
       data: response,
-      all_reviews
+      all_reviews,
     });
   } catch (error) {
     console.log(error);
@@ -41,9 +48,10 @@ exports.get_review_by_id = async (req, res, next) => {
 };
 
 exports.create_review = async (req, res, next) => {
-  const { user_id, product_id } = req.params;
+  const user_id = req.user._id;
+  const { product_id } = req.params;
   const review = req.body;
-  
+
   try {
     const response = await Review.create({ user_id, product_id, ...review });
     return res.status(201).json(response);

@@ -3,6 +3,7 @@ const { product_controller } = require("../controllers");
 
 const nodemailer = require("nodemailer");
 const { upload } = require("../middlewares/multer.middleware");
+const { is_authenticated } = require("../middlewares/auth");
 
 const transporter = nodemailer.createTransport({
   service: "gmail",

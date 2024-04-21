@@ -15,11 +15,10 @@ interface propTypes {
 }
 
 export const AddressFormComponent = (props: propTypes) => {
-  const userId = JSON.parse(localStorage.getItem("userId") || "");
   const { address, closeModal } = props;
   console.log(address);
 
-  const { isPending, mutate: createAddressMutation } = useCreateAddress(userId);
+  const { isPending, mutate: createAddressMutation } = useCreateAddress();
 
   const { isPending: isUpdatePending, mutate: updateAddressMutation } =
     useUpdateAddress(address?._id);

@@ -1,39 +1,34 @@
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Button,
-  Divider,
-  Paper,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Paper, Stack, Typography } from "@mui/material";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import { LoadingButton } from "@mui/lab";
 import { FormInputText } from "../../components/Form/FormInputText";
 import { TLoginSchema, loginSchema } from "../../lib/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { loginUser } from "../../api/user.api";
+import { useLoginUser } from "@/features/auth/api/login";
+import googleIcon from "@/assets/icons/google_icon.svg";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
+  const { isPending, mutate } = useLoginUser();
 
-  const { isPending, isError, error, mutate } = useMutation({
-    mutationFn: (user) => loginUser(user),
-    onSuccess: (data) => {
-      localStorage.setItem("userId", JSON.stringify(data.user._id));
-      navigate("/");
-    },
-  });
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        await axios.get("/login/success");
+        navigate("/");
+      } catch (error) {
+        // console.log(error);
+      }
+    };
+    getUser();
+  }, []);
 
-  if (isError) {
-    console.log(error.message);
-  }
+  const googleAuth = () => {
+    window.open("http://localhost:8080/login/federated/google", "_self");
+  };
 
   const defaultValues = {
     email: "",
@@ -53,6 +48,7 @@ const LoginPage = () => {
     // console.log(data);
     mutate(data);
   };
+  if (isPending) return <div>Loading...</div>;
 
   return (
     <Box
@@ -87,12 +83,14 @@ const LoginPage = () => {
                 name={"email"}
                 control={control}
                 label={"Email"}
+                size="medium"
               />
               <FormInputText
                 type="text"
                 name={"password"}
                 control={control}
                 label={"Password"}
+                size="medium"
               />
               <LoadingButton
                 type="submit"
@@ -104,6 +102,28 @@ const LoginPage = () => {
               </LoadingButton>
             </Stack>
           </form>
+          <Stack direction="row" justifyContent="center">
+            <Stack
+              direction="row"
+              justifyContent="center"
+              alignItems="center"
+              gap={2}
+              sx={{
+                borderRadius: 50,
+                width: 1,
+                color: "white",
+                bgcolor: "#111111",
+                p: 1,
+                "&:hover": { cursor: "pointer", bgcolor: "#393C3F" },
+              }}
+              component={Paper}
+              elevation={1}
+              onClick={googleAuth}
+            >
+              <img src={googleIcon} alt="" width="50px" height="50px" />
+              <Typography variant="h6">Login with google</Typography>
+            </Stack>
+          </Stack>
           <Typography variant="body1" textAlign="center">
             Don't have any account?
             <Link to="/signup">

@@ -6,12 +6,9 @@ export const fetchOrders = async (options: any) => {
     page = 0,
     rowsPerPage: limit = 5,
     // sortProducts: sortBy = "",
-    userId,
   } = options || {};
   try {
-    const { data } = await axios.get(
-      `/orders?page=${page}&limit=${limit}&user_id=${userId}`
-    );
+    const { data } = await axios.get(`/orders?page=${page}&limit=${limit}`);
     return data;
   } catch (error) {
     console.log(error);
@@ -19,9 +16,9 @@ export const fetchOrders = async (options: any) => {
 };
 
 export const useGetOrders = (options: any) => {
-  const { page, rowsPerPage, userId } = options;
+  const { page, rowsPerPage } = options;
   return useQuery({
-    queryKey: ["orders", { page, rowsPerPage, userId }],
-    queryFn: () => fetchOrders({ page, rowsPerPage, userId }),
+    queryKey: ["orders", { page, rowsPerPage }],
+    queryFn: () => fetchOrders({ page, rowsPerPage }),
   });
 };

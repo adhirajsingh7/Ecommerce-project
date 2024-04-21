@@ -21,8 +21,8 @@ const CartPage = () => {
   const navigate = useNavigate();
   const userCart = useOutletContext();
 
-  const { mutate } = useUpdateCart(userCart[0]._id);
-  const { mutate: emptyCartMutation } = useEmptyCart(userCart[0]._id);
+  const { mutate } = useUpdateCart(userCart._id);
+  const { mutate: emptyCartMutation } = useEmptyCart(userCart._id);
 
   const handleIncreaseQuantity = (product) => {
     if (product.product.stock > product.quantity) {
@@ -68,7 +68,7 @@ const CartPage = () => {
       <Typography variant="h4" textAlign="center" sx={{ p: 2 }}>
         CartPage
       </Typography>
-      {userCart[0]?.products.length > 0 ? (
+      {userCart?.products.length > 0 ? (
         <>
           <Stack direction="row" justifyContent="flex-end" sx={{ mr: 4 }}>
             <Button variant="contained" onClick={handleEmptyCart}>
@@ -77,7 +77,7 @@ const CartPage = () => {
           </Stack>
           <Stack direction="row" justifyContent="space-around" sx={{ mt: 4 }}>
             <Stack direction="column" gap={3}>
-              {userCart[0].products.map((product, index) => (
+              {userCart.products.map((product, index) => (
                 <Stack
                   alignItems="center"
                   justifyContent="space-around"
@@ -168,7 +168,7 @@ const CartPage = () => {
                 </Stack>
               ))}
             </Stack>
-            <CartCheckoutComponent {...userCart[0]} />
+            <CartCheckoutComponent {...userCart} />
           </Stack>
         </>
       ) : (

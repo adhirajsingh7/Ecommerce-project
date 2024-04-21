@@ -4,9 +4,10 @@ import { NavbarComponent } from "@/components/Navbar/Navbar.component";
 import { useGetCart } from "@/features/cart/api/getCart";
 
 export const NavbarLayout = () => {
-  const userId = JSON.parse(localStorage.getItem("userId") || "");
 
-  const { isPending, data: userCart } = useGetCart(userId);
+  const { isPending, data: userCart } = useGetCart();
+
+  // console.log(userCart?.data[0]);
 
   if (isPending) {
     return <span>Loading...</span>;
@@ -14,8 +15,8 @@ export const NavbarLayout = () => {
 
   return (
     <>
-      <NavbarComponent userCart={userCart} />
-      <Outlet context={userCart} />
+      <NavbarComponent userCart={userCart?.data[0]} />
+      <Outlet context={userCart?.data[0]} />
     </>
   );
 };

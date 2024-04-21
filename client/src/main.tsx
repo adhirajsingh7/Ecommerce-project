@@ -17,15 +17,26 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Loading } from "./components/Loading";
 
 axios.defaults.baseURL = "http://localhost:8080";
+axios.defaults.withCredentials = true;
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
+      retry: false,
     },
   },
   queryCache: new QueryCache({
-    onError: (error) => toast.error(`Something went wrong: ${error.message}`),
+    onError: (error) => {
+      console.log("REACT QUERY ERROR : ", error);
+      if (error?.response?.data?.message) {
+        toast.error(
+          `Status: ${error?.response?.status} ${error?.response?.data?.message}`
+        );
+      } else {
+        toast.error(`Something went wrong: ${error.message}`);
+      }
+    },
   }),
 });
 

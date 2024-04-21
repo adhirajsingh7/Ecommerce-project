@@ -16,14 +16,11 @@ const OrdersPage = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-  const userId = JSON.parse(localStorage.getItem("userId") || "");
-
   const { isPending, data: ordersList } = useGetOrders({
     page,
     rowsPerPage,
-    userId,
   });
-  console.log(ordersList);
+  // console.log(ordersList);
 
   if (isPending) {
     return (
@@ -89,9 +86,11 @@ const OrdersPage = () => {
                   </TableRow>
                 ))
               ) : (
-                <TableCell scope="row" align="center" colSpan={4}>
-                  No orders placed yet
-                </TableCell>
+                <TableRow>
+                  <TableCell scope="row" align="center" colSpan={4}>
+                    No orders placed yet
+                  </TableCell>
+                </TableRow>
               )}
             </TableBody>
           </Table>

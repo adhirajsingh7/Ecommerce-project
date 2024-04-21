@@ -1,16 +1,12 @@
 import React from "react";
 import { Stack, Typography } from "@mui/material";
 import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
-import {
-  AddressCardComponent,
-  CreateAddress,
-} from "@/components/Address";
+import { AddressCardComponent, CreateAddress } from "@/components/Address";
 import { useGetAddresses } from "@/features/address/api/getAddresses";
 
 const AddressPage = () => {
-  const userId = JSON.parse(localStorage.getItem("userId") || "");
-
-  const { isPending, data: addressList } = useGetAddresses(userId);
+  const { isPending, data: addressList } = useGetAddresses();
+  // console.log(addressList);
 
   if (isPending) {
     return (

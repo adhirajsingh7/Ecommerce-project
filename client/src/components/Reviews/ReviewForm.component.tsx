@@ -13,11 +13,9 @@ export const ReviewFormComponent = (props: any) => {
   const { closeModal } = props;
 
   const params = useParams();
-  const userId = JSON.parse(localStorage.getItem("userId") || "");
   const productId = params?.product_id || "";
 
   const { isPending, mutate: createReviewMutation } = useCreateReview({
-    userId,
     productId,
     closeModal,
   });

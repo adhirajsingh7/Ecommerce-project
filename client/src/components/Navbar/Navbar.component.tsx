@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -7,17 +7,36 @@ import IconButton from "@mui/material/IconButton";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useNavigate } from "react-router-dom";
-import { Badge, Button, Stack } from "@mui/material";
+import { Avatar, Badge, Button, Stack, Tooltip } from "@mui/material";
 import shoppingIcon from "../../assets/icons/shopping-icon.svg";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useUserStore } from "@/store/store";
 
 export const NavbarComponent = (props: any) => {
   const { userCart } = props;
+  const [quantity, setQuantity] = useState(0);
+  const user = useUserStore((state) => state.user);
+  // console.log(user);
+  console.log(userCart);
+  useEffect(() => {
+    let total_quantity = 0;
+    userCart.products.forEach(
+      (product: any) => (total_quantity += product.quantity)
+    );
+    setQuantity(total_quantity);
+  }, [userCart]);
 
-  let total_quantity = 0;
-  userCart[0]?.products.forEach(
-    (product: any) => (total_quantity += product.quantity)
-  );
-  // console.log(total_quantity);
+  const handleLogOut = async () => {
+    try {
+      const res = await axios.post("/logout");
+      console.log(res);
+      toast.success("Logged out successfully!");
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const navigate = useNavigate();
   const handleHomeNavigation = () => {
@@ -32,6 +51,9 @@ export const NavbarComponent = (props: any) => {
   const handleProductsNavigation = () => {
     navigate("/products");
   };
+  const handleProfileNavigation = () => {
+    navigate("/dashboard/account");
+  };
 
   return (
     <>
@@ -43,30 +65,51 @@ export const NavbarComponent = (props: any) => {
               alt=""
               style={{ height: "40px", width: "40px", objectFit: "cover" }}
             />
-
             <Typography
               variant="h6"
               component="div"
-              sx={{ flexGrow: 1, "&:hover": { cursor: "pointer" } }}
+              sx={{
+                flexGrow: 1,
+                "&:hover": { cursor: "pointer" },
+              }}
               onClick={handleHomeNavigation}
             >
               Ecommerce
             </Typography>
             <Stack direction="row" gap={2}>
-              <Button
-                sx={{ color: "white" }}
-                onClick={() => handleProductsNavigation()}
-              >
-                View products
+              <Tooltip title="Products">
+                <Button
+                  sx={{ color: "white" }}
+                  onClick={() => handleProductsNavigation()}
+                >
+                  View products
+                </Button>
+              </Tooltip>
+              <Tooltip title="Cart">
+                <IconButton onClick={handleCartNavigation}>
+                  <Badge color="secondary" badgeContent={quantity} max={10}>
+                    <ShoppingCartIcon sx={{ color: "white" }} />
+                  </Badge>
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Settings">
+                <IconButton onClick={handleSettingsNavigation}>
+                  <SettingsIcon sx={{ color: "white" }} />
+                </IconButton>
+              </Tooltip>
+              {user && (
+                <Tooltip title={user?.full_name}>
+                  <Avatar
+                    alt={user?.full_name}
+                    src={user?.avatar}
+                    onClick={handleProfileNavigation}
+                    sx={{ "&:hover": { cursor: "pointer" } }}
+                  />
+                </Tooltip>
+              )}
+              <Button variant="contained" onClick={handleLogOut}>
+                Log out
               </Button>
-              <IconButton onClick={handleCartNavigation}>
-                <Badge color="secondary" badgeContent={total_quantity} max={10}>
-                  <ShoppingCartIcon sx={{ color: "white" }} />
-                </Badge>
-              </IconButton>
-              <IconButton onClick={handleSettingsNavigation}>
-                <SettingsIcon sx={{ color: "white" }} />
-              </IconButton>
             </Stack>
           </Toolbar>
         </AppBar>

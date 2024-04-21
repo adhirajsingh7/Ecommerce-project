@@ -7,9 +7,8 @@ import { useCreateOrder } from "@/features/orders/api/createOrder";
 export const SelectAddressComponent = (props: any) => {
   const { closeModal, amount, cartId } = props;
   const [selectedAddress, setSelectedAddress] = useState("");
-  const userId = JSON.parse(localStorage.getItem("userId") || "");
 
-  const { isPending, data: addressList } = useGetAddresses(userId);
+  const { isPending, data: addressList } = useGetAddresses();
   const { mutate: createOrderMutation } = useCreateOrder();
 
   if (isPending) {
@@ -19,10 +18,8 @@ export const SelectAddressComponent = (props: any) => {
       </Stack>
     );
   }
-
   const handlePlaceOrder = () => {
     const order = {
-      user_id: userId,
       cart_id: cartId,
       address_id: selectedAddress,
       total_amount: amount,

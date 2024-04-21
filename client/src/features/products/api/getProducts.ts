@@ -1,7 +1,7 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-export const fetchProducts = async (options: any) => {
+export const fetchProducts = (options: any) => {
   const {
     page = 1,
     rowsPerPage: limit = 5,
@@ -12,14 +12,9 @@ export const fetchProducts = async (options: any) => {
 
   let categoriesFilter = "";
   categoriesFilter = categories.join(",");
-  try {
-    const { data } = await axios.get(
-      `/products?page=${page}&limit=${limit}&name=${name}&category=${categoriesFilter}&sortBy=${sortBy}`
-    );
-    return data;
-  } catch (error) {
-    console.log(error);
-  }
+  return axios.get(
+    `/products?page=${page}&limit=${limit}&name=${name}&category=${categoriesFilter}&sortBy=${sortBy}`
+  );
 };
 
 export const useGetProducts = (

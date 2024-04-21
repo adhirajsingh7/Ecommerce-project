@@ -1,9 +1,12 @@
 const router = require("express").Router();
 const { review_controller } = require("../controllers");
+const { is_authenticated } = require("../middlewares/auth");
 
 router.route("/").get(review_controller.get_reviews);
 
-router.route("/:user_id/:product_id").post(review_controller.create_review);
+router
+  .route("/:product_id")
+  .post(is_authenticated, review_controller.create_review);
 
 router
   .route("/:review_id")

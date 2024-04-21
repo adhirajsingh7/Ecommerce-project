@@ -1,10 +1,11 @@
 const { Cart } = require("../models/cart");
 
 exports.get_all_carts = async (req, res, next) => {
-  const { user_id } = req.query;
+  // const { user_id } = req.query;
   try {
     let criteria = {};
-    if (user_id) criteria.user_id = user_id;
+    // if (user_id) criteria.user_id = user_id;
+    criteria.user_id = req.user._id;
 
     const response = await Cart.find(criteria).populate("products.product");
     res.status(200).send(response);
@@ -15,7 +16,7 @@ exports.get_all_carts = async (req, res, next) => {
 };
 
 exports.add_product = async (req, res, next) => {
-  const { user_id } = req.params;
+  const user_id = req.user._id;
   const product = req.body;
   try {
     const cart = await Cart.findOne({ user_id: user_id });

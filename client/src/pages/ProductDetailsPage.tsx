@@ -11,17 +11,16 @@ const ProductDetailsPage = () => {
   const navigate = useNavigate();
   const params = useParams();
   const userCart = useOutletContext();
-  const userId = JSON.parse(localStorage.getItem("userId") || "");
 
   let productInCart = false;
-  userCart[0]?.products.forEach((product) => {
+  userCart?.products.forEach((product) => {
     if (product.product._id === params.product_id) {
       productInCart = true;
     }
   });
 
   const { isPending, data: product } = useGetProductById(params.product_id);
-  const { mutate } = useAddToCart(userId);
+  const { mutate } = useAddToCart();
 
   if (isPending) return <Loading />;
 

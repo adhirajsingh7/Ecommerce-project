@@ -1,13 +1,14 @@
 const { Address } = require("../models/address");
 
 exports.get_addresses = async (req, res, next) => {
-  let { page = 0, limit = 10, user_id = "" } = req.query;
+  let { page = 0, limit = 10 } = req.query;
   page = parseInt(page) || 0;
   limit = parseInt(limit) || 10;
 
   let offset = page * limit;
   let criteria = {};
-  if (user_id) criteria.user_id = user_id;
+  // if (user_id) criteria.user_id = user_id;
+  criteria.user_id = req.user._id;
 
   try {
     const response = await Address.find(criteria)
@@ -43,7 +44,8 @@ exports.get_address_by_id = async (req, res, next) => {
 };
 
 exports.create_address = async (req, res, next) => {
-  const { user_id } = req.params;
+  // const { user_id } = req.params;
+  const user_id = req.user._id;
   const address = req.body;
 
   try {

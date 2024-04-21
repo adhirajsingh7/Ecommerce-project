@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import { lazy } from "react";
 
 import { DashboardLayout, NavbarLayout } from "@/layout";
+import { ProtectedRoute } from "@/utils/ProtectedRoute";
 const CartPage = lazy(() => import("@/pages/Cart/CartPage"));
 const AddressPage = lazy(() => import("@/pages/Dashboard/AddressPage"));
 const MerchantsPage = lazy(() => import("@/pages/Dashboard/MerchantsPage"));
@@ -27,7 +28,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/",
-    element: <NavbarLayout />,
+    element: (
+      <ProtectedRoute>
+        <NavbarLayout />
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: "/",

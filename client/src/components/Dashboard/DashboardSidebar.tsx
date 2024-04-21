@@ -16,16 +16,42 @@ import SellIcon from "@mui/icons-material/Sell";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import "./DashboardSidebar.styles.scss";
+import { useUserStore } from "@/store/store";
 
 export const DashboardSidebar = () => {
+  const user = useUserStore((state) => state.user);
   const dashboard_sidebar_options = [
-    { label: "Account", slug: "account", icon: PersonIcon },
-    { label: "Addresses", slug: "addresses", icon: HomeIcon },
-    { label: "View Orders", slug: "view-orders", icon: ShoppingBagIcon },
-    { label: "Sell Products", slug: "sell-products", icon: SellIcon },
-    { label: "View Merchants", slug: "merchants", icon: StorefrontIcon },
+    {
+      label: "Account",
+      slug: "account",
+      icon: PersonIcon,
+      roles: ["admin", "user", "merchant"],
+    },
+    {
+      label: "Addresses",
+      slug: "addresses",
+      icon: HomeIcon,
+      roles: ["admin", "user", "merchant"],
+    },
+    {
+      label: "View Orders",
+      slug: "view-orders",
+      icon: ShoppingBagIcon,
+      roles: ["admin", "user", "merchant"],
+    },
+    {
+      label: "Sell Products",
+      slug: "sell-products",
+      icon: SellIcon,
+      roles: ["admin", "merchant"],
+    },
+    {
+      label: "View Merchants",
+      slug: "merchants",
+      icon: StorefrontIcon,
+      roles: ["admin"],
+    },
   ];
-
   return (
     <>
       <Stack direction="column" sx={{ width: 1 / 5 }}>
@@ -33,32 +59,34 @@ export const DashboardSidebar = () => {
         <List>
           {dashboard_sidebar_options.map((item, index) => {
             return (
-              <React.Fragment key={index}>
-                <NavLink
-                  style={{ textDecoration: "none" }}
-                  to={`${item.slug}`}
-                  className={({ isActive }) =>
-                    isActive ? "active" : "inactive"
-                  }
-                  replace
-                  children={({ isActive }) => {
-                    return (
-                      <>
-                        <ListItem
-                          disablePadding
-                          className={isActive ? "active" : "inactive"}
-                          sx={{ color: "black" }}
-                        >
-                          <ListItemButton>
-                            <ListItemIcon>{<item.icon />}</ListItemIcon>
-                            <ListItemText primary={item.label} />
-                          </ListItemButton>
-                        </ListItem>
-                      </>
-                    );
-                  }}
-                ></NavLink>
-              </React.Fragment>
+              item.roles.includes(user.role) && (
+                <React.Fragment key={index}>
+                  <NavLink
+                    style={{ textDecoration: "none" }}
+                    to={`${item.slug}`}
+                    className={({ isActive }) =>
+                      isActive ? "active" : "inactive"
+                    }
+                    replace
+                    children={({ isActive }) => {
+                      return (
+                        <>
+                          <ListItem
+                            disablePadding
+                            className={isActive ? "active" : "inactive"}
+                            sx={{ color: "black" }}
+                          >
+                            <ListItemButton>
+                              <ListItemIcon>{<item.icon />}</ListItemIcon>
+                              <ListItemText primary={item.label} />
+                            </ListItemButton>
+                          </ListItem>
+                        </>
+                      );
+                    }}
+                  ></NavLink>
+                </React.Fragment>
+              )
             );
           })}
         </List>
