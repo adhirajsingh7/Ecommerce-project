@@ -1,33 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { Box, Paper, Stack, Typography } from "@mui/material";
-import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Box, Divider, Paper, Stack, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 import { LoadingButton } from "@mui/lab";
 import { FormInputText } from "../../components/Form/FormInputText";
 import { TLoginSchema, loginSchema } from "../../lib/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useLoginUser } from "@/features/auth/api/login";
+import { useUserStore } from "@/store/store";
 import googleIcon from "@/assets/icons/google_icon.svg";
 
 const LoginPage = () => {
-  const navigate = useNavigate();
+  const setIsLoggedIn = useUserStore((state) => state.setIsLoggedIn);
   const { isPending, mutate } = useLoginUser();
-
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        await axios.get("/login/success");
-        navigate("/");
-      } catch (error) {
-        // console.log(error);
-      }
-    };
-    getUser();
-  }, []);
 
   const googleAuth = () => {
     window.open("http://localhost:8080/login/federated/google", "_self");
+    setIsLoggedIn(true);
   };
 
   const defaultValues = {
@@ -57,13 +46,11 @@ const LoginPage = () => {
         width: 1,
       }}
     >
-      <Box
+      <Stack
+        justifyContent="center"
+        alignItems="center"
         sx={{
           height: 1,
-          width: 1,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
         }}
       >
         <Stack
@@ -71,9 +58,10 @@ const LoginPage = () => {
           gap={2}
           sx={{
             p: 8,
-            boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
             borderRadius: 6,
           }}
+          component={Paper}
+          elevation={5}
         >
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack direction="column" gap={2} sx={{ width: "350px" }}>
@@ -86,7 +74,7 @@ const LoginPage = () => {
                 size="medium"
               />
               <FormInputText
-                type="text"
+                type="password"
                 name={"password"}
                 control={control}
                 label={"Password"}
@@ -97,41 +85,47 @@ const LoginPage = () => {
                 loading={isPending}
                 loadingPosition="center"
                 variant="contained"
+                sx={{
+                  background:
+                    "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+                  border: 0,
+                  borderRadius: 50,
+                  boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
+                  color: "white",
+                  p: 2,
+                }}
               >
                 <span>Login</span>
               </LoadingButton>
             </Stack>
           </form>
-          <Stack direction="row" justifyContent="center">
-            <Stack
-              direction="row"
-              justifyContent="center"
-              alignItems="center"
-              gap={2}
-              sx={{
-                borderRadius: 50,
-                width: 1,
-                color: "white",
-                bgcolor: "#111111",
-                p: 1,
-                "&:hover": { cursor: "pointer", bgcolor: "#393C3F" },
-              }}
-              component={Paper}
-              elevation={1}
-              onClick={googleAuth}
-            >
-              <img src={googleIcon} alt="" width="50px" height="50px" />
-              <Typography variant="h6">Login with google</Typography>
-            </Stack>
+          <Divider>OR</Divider>
+          <Stack
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            gap={2}
+            sx={{
+              borderRadius: 50,
+              width: 1,
+              p: 1,
+              "&:hover": { cursor: "pointer" },
+            }}
+            component={Paper}
+            elevation={2}
+            onClick={googleAuth}
+          >
+            <img src={googleIcon} alt="" width="50px" height="50px" />
+            <Typography variant="h6">Login with google</Typography>
           </Stack>
           <Typography variant="body1" textAlign="center">
-            Don't have any account?
+            Don't have any account?{" "}
             <Link to="/signup">
               <span>Signup</span>
             </Link>
           </Typography>
         </Stack>
-      </Box>
+      </Stack>
     </Box>
   );
 };

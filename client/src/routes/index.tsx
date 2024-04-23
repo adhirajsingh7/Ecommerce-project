@@ -11,11 +11,13 @@ const ProfilePage = lazy(() => import("@/pages/Dashboard/ProfilePage"));
 const SellProductsPage = lazy(
   () => import("@/pages/Dashboard/SellProductsPage")
 );
-const HomePage = lazy(() => import("@/pages/HomePage"));
+const HomePage = lazy(() => import("@/pages/Home/HomePage"));
 const LoginPage = lazy(() => import("@/pages/Login/LoginPage"));
-const ProductDetailsPage = lazy(() => import("@/pages/ProductDetailsPage"));
+const ProductDetailsPage = lazy(
+  () => import("@/pages/Products/ProductDetailsPage")
+);
 const ProductsPage = lazy(() => import("@/pages/Products/ProductsPage"));
-const SignupPage = lazy(() => import("@/pages/SignupPage"));
+const SignupPage = lazy(() => import("@/pages/Signup/SignupPage"));
 
 const router = createBrowserRouter([
   {

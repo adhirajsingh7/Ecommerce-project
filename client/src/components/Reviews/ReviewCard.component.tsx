@@ -1,8 +1,11 @@
 import React from "react";
 import { Avatar, Box, Paper, Rating, Stack, Typography } from "@mui/material";
+import { useUserStore } from "@/store/store";
+import { DeleteReview } from "./DeleteReview.component";
 
 export const ReviewCard = (props: any) => {
-  const { title, content, rating, user_id, created_at } = props;
+  const { _id: reviewId, title, content, rating, user_id, created_at } = props;
+  const user = useUserStore((state) => state.user);
 
   return (
     <Stack
@@ -25,11 +28,14 @@ export const ReviewCard = (props: any) => {
     >
       <Avatar>{user_id?.full_name.toUpperCase().charAt(0)}</Avatar>
       <Stack direction="column">
-        <Stack direction="row" gap={2}>
+        <Stack direction="row" gap={2} alignItems="center">
           <Rating name="product-rating" value={rating} readOnly />
           <Typography variant="subtitle1" fontWeight={800}>
             {title}
           </Typography>
+          {user && user?._id === user_id?._id ? (
+            <DeleteReview reviewId={reviewId} />
+          ) : null}
         </Stack>
         <Box
           sx={{

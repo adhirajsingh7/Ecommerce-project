@@ -11,12 +11,7 @@ export const createProduct = async (product: any) => {
   formData.append("category", product.category);
   formData.append("image", product.image[0] || "");
 
-  try {
-    const { data } = await axios.post("/products", formData);
-    return data;
-  } catch (error) {
-    console.log(error);
-  }
+  return axios.post("/products", formData);
 };
 
 export const useCreateProduct = (setSearch, setPage, closeModal) => {

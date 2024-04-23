@@ -1,14 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 import { toast } from "react-toastify";
+import axios from "axios";
 
-export const createAddress = async (address: any) => {
-  try {
-    const response = await axios.post("/addresses", address);
-    return response?.data;
-  } catch (error) {
-    console.log(error);
-  }
+export const createAddress = (address: any) => {
+  return axios.post("/addresses", address);
 };
 
 export const useCreateAddress = () => {

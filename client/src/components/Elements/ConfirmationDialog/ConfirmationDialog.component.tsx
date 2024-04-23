@@ -7,6 +7,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
+import { LoadingButton } from "@mui/lab";
 
 export const ConfirmationDialog = (props: any) => {
   const {
@@ -18,6 +19,7 @@ export const ConfirmationDialog = (props: any) => {
     handleClose,
     noText,
     yesText,
+    isPending,
   } = props;
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
@@ -44,9 +46,13 @@ export const ConfirmationDialog = (props: any) => {
           <Button autoFocus color="inherit" onClick={handleClose}>
             {noText}
           </Button>
-          <Button onClick={handleDelete} autoFocus>
-            {yesText}
-          </Button>
+          <LoadingButton
+            loading={isPending}
+            loadingPosition="center"
+            onClick={handleDelete}
+          >
+            <span>{yesText}</span>
+          </LoadingButton>
         </DialogActions>
       </Dialog>
     </React.Fragment>

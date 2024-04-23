@@ -1,15 +1,5 @@
-import {
-  Divider,
-  IconButton,
-  InputAdornment,
-  Stack,
-  TablePagination,
-  TextField,
-  Typography,
-} from "@mui/material";
 import React, { useState } from "react";
-import SearchIcon from "@mui/icons-material/Search";
-import ClearIcon from "@mui/icons-material/Clear";
+import { Divider, Stack, TablePagination, Typography } from "@mui/material";
 import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 import { useGetProducts } from "@/features/products/api/getProducts";
 import {
@@ -17,15 +7,16 @@ import {
   ProductsFilterComponent,
   ProductsSortComponent,
 } from "@/components/Products";
+import { SearchComponent } from "@/components/Elements/Search";
 import useDebounce from "@/hooks/useDebounce";
 
 const ProductsPage = () => {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [search, setSearch] = useState("");
-  const debouncedSearch = useDebounce(search, 500);
   const [categories, setCategories] = useState<string[]>([]);
-  const [sortProducts, setSortProducts] = React.useState("relevance");
+  const [sortProducts, setSortProducts] = useState("relevance");
+  const debouncedSearch = useDebounce(search, 500);
 
   const { isPending, data: productsList } = useGetProducts(
     page,
@@ -63,37 +54,15 @@ const ProductsPage = () => {
   return (
     <>
       <Stack direction="row" justifyContent="center" sx={{ p: 2 }}>
-        <TextField
-          sx={{ width: "300px" }}
-          placeholder="Search by name"
-          value={search}
-          onChange={handleSearchChange}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-            endAdornment: (
-              <InputAdornment position="end">
-                {search && (
-                  <IconButton onClick={handleClearText} edge="end">
-                    <ClearIcon />
-                  </IconButton>
-                )}
-              </InputAdornment>
-            ),
-          }}
+        <SearchComponent
+          search={search}
+          handleSearchChange={handleSearchChange}
+          handleClearText={handleClearText}
         />
       </Stack>
       <Divider orientation="horizontal" />
-      <Stack
-        direction="row"
-        // height: "calc(100vh - 64px - 40px)",
-        sx={{ width: 1, height: "100vh" }}
-      >
-        {/* border: 1, */}
-        <Stack direction="column" sx={{ height: "100%", width: 1 / 5, p: 2 }}>
+      <Stack direction="row" sx={{ width: 1 }}>
+        <Stack direction="column" sx={{ width: 1 / 5, p: 2 }}>
           <ProductsFilterComponent
             setCategories={setCategories}
             setPage={setPage}
@@ -102,21 +71,14 @@ const ProductsPage = () => {
         <Divider orientation="vertical" />
         <Stack
           direction="column"
-          // border: 1,
           sx={{
             width: 4 / 5,
             bgcolor: "#f5f5f5",
             px: 2,
             py: 1,
           }}
-          // bgcolor: "#e3e5e8"
         >
-          <Stack
-            direction="row"
-            justifyContent="flex-end"
-            gap={2}
-            // sx={{ px: 2 }}
-          >
+          <Stack direction="row" justifyContent="flex-end" gap={2}>
             <ProductsSortComponent
               sortProducts={sortProducts}
               setSortProducts={setSortProducts}

@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useUserStore } from "@/store/store";
 import axios from "axios";
 
 export const loginUser = (user) => {
@@ -8,13 +9,15 @@ export const loginUser = (user) => {
 };
 
 export const useLoginUser = () => {
+  const setIsLoggedIn = useUserStore((state) => state.setIsLoggedIn);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (user) => loginUser(user),
     onSuccess: () => {
-      //   queryClient.invalidateQueries({ queryKey: ["products"] });
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+      setIsLoggedIn(true);
       toast.success("Logged in successfully!");
       navigate("/");
     },

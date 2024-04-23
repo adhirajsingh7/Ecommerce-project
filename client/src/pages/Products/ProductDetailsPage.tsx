@@ -6,11 +6,14 @@ import { ReviewsComponent } from "@/components/Reviews";
 import { useAddToCart } from "@/features/cart/api/addToCart";
 import { Loading } from "@/components/Loading";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import { useUserStore } from "@/store/store";
+import { toast } from "react-toastify";
 
 const ProductDetailsPage = () => {
   const navigate = useNavigate();
   const params = useParams();
   const userCart = useOutletContext();
+  const isLoggedIn = useUserStore((state) => state.isLoggedIn);
 
   let productInCart = false;
   userCart?.products.forEach((product) => {
@@ -25,6 +28,8 @@ const ProductDetailsPage = () => {
   if (isPending) return <Loading />;
 
   const handleAddToCart = () => {
+    if (!isLoggedIn) return toast.warning("You need to sign in!");
+
     const updatedProduct = {
       product: product._id,
       quantity: 1,
@@ -34,6 +39,8 @@ const ProductDetailsPage = () => {
   };
 
   const handleBuyNow = () => {
+    if (!isLoggedIn) return toast.warning("You need to sign in!");
+
     const updatedProduct = {
       product: product._id,
       quantity: 1,

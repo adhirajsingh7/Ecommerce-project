@@ -7,9 +7,26 @@ const {
 const bcrypt = require("bcrypt");
 
 exports.get_users = async (req, res, next) => {
+  let { page = 0, limit = 10, name = "", status = "", role = "" } = req.query;
+  page = parseInt(page) || 0;
+  limit = parseInt(limit) || 10;
+
+  let offset = page * limit;
+  let criteria = {};
+  if (name) criteria.full_name = { $regex: name, $options: "i" };
+  if (status) criteria.status = { $eq: status };
+  if (role) criteria.role = { $eq: role };
+
   try {
-    const response = await User.find({});
-    res.status(200).send(response);
+    const response = await User.find(criteria, {}, { skip: offset, limit });
+    const count = await User.find(criteria).countDocuments();
+
+    res.status(200).send({
+      total: count,
+      total_page: Math.ceil(count / limit),
+      current_page: page,
+      data: response,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: error.message });
@@ -42,12 +59,11 @@ exports.create_user = async (req, res, next) => {
 exports.update_user = async (req, res, next) => {
   const { user_id } = req.params;
   const updated_user = req.body;
-  const { previous_password, new_password } = req.body;
+  const { previous_password, new_password, email } = req.body;
 
   // console.log(req.body);
   // console.log(req.files);
   // return res.status(200).send("asdasd");
-
   try {
     if (new_password) {
       const user = await User.findOne({ _id: user_id });
@@ -62,6 +78,12 @@ exports.update_user = async (req, res, next) => {
       updated_user.password = await bcrypt.hash(new_password, 10);
     }
 
+    if (email) {
+      const userExistsWithEmail = await User.findOne({ email: email });
+      if (userExistsWithEmail && userExistsWithEmail._id.toString() !== user_id)
+        return res.status(409).json({ message: "Email alread in use" });
+    }
+
     // upload image
     let avatar_local_path;
     if (
@@ -73,7 +95,11 @@ exports.update_user = async (req, res, next) => {
     }
 
     const avatar = await upload_on_cloudinary(avatar_local_path);
-    updated_user.avatar = avatar?.url || "";
+    if (avatar) {
+      updated_user.avatar = avatar.url;
+    } else {
+      delete updated_user["avatar"];
+    }
 
     const response = await User.findOneAndUpdate(
       { _id: user_id },

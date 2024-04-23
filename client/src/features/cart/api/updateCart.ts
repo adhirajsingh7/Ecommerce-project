@@ -1,13 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
-export const updateCart = async (cartId: string, updatedProduct: any) => {
-  try {
-    const { data } = await axios.put(`/cart/${cartId}`, updatedProduct);
-    return data;
-  } catch (error) {
-    console.log(error);
-  }
+export const updateCart = (cartId: string, updatedProduct: any) => {
+  return axios.put(`/cart/${cartId}`, updatedProduct);
 };
 
 export const useUpdateCart = (cartId: string) => {

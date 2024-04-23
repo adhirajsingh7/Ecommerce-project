@@ -2,7 +2,6 @@ import {
   Chip,
   CircularProgress,
   IconButton,
-  InputAdornment,
   Paper,
   Stack,
   Table,
@@ -12,7 +11,6 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  TextField,
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
@@ -24,9 +22,8 @@ import { useDeleteProduct } from "@/features/products/api/deleteProduct";
 import useDebounce from "@/hooks/useDebounce";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
-import SearchIcon from "@mui/icons-material/Search";
-import ClearIcon from "@mui/icons-material/Clear";
 import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
+import { SearchComponent } from "@/components/Elements/Search";
 
 const SellProductsPage = () => {
   const [deletingProductId, setDeletingProductId] = useState<string | null>(
@@ -46,16 +43,12 @@ const SellProductsPage = () => {
   );
 
   const { isPending: isDeletePending, mutate: deleteProductMutation } =
-    useDeleteProduct();
+    useDeleteProduct(setSearch, setPage);
 
   // console.log(productsList);
   if (isPending) {
     return (
-      <Stack
-        justifyContent="center"
-        alignItems="center"
-        sx={{ height: "calc(100vh - 64px)" }}
-      >
+      <Stack justifyContent="center" alignItems="center" sx={{ height: 1 }}>
         <ClimbingBoxLoader color="#FE6D87" size={25} />
       </Stack>
     );
@@ -105,27 +98,10 @@ const SellProductsPage = () => {
       >
         <Typography variant="h5">Sell products</Typography>
         <Stack direction="row" justifyContent="space-between" sx={{ p: 1 }}>
-          <TextField
-            sx={{ width: "300px" }}
-            placeholder="Search by name"
-            value={search}
-            onChange={handleSearchChange}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-              endAdornment: (
-                <InputAdornment position="end">
-                  {search && (
-                    <IconButton onClick={handleClearText} edge="end">
-                      <ClearIcon />
-                    </IconButton>
-                  )}
-                </InputAdornment>
-              ),
-            }}
+          <SearchComponent
+            search={search}
+            handleSearchChange={handleSearchChange}
+            handleClearText={handleClearText}
           />
           <CreateProduct setSearch={setSearch} setPage={setPage} />
         </Stack>

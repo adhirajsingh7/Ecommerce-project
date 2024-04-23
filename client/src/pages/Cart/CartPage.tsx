@@ -21,8 +21,8 @@ const CartPage = () => {
   const navigate = useNavigate();
   const userCart = useOutletContext();
 
-  const { mutate } = useUpdateCart(userCart._id);
-  const { mutate: emptyCartMutation } = useEmptyCart(userCart._id);
+  const { mutate } = useUpdateCart(userCart?._id);
+  const { mutate: emptyCartMutation } = useEmptyCart(userCart?._id);
 
   const handleIncreaseQuantity = (product) => {
     if (product.product.stock > product.quantity) {

@@ -7,12 +7,8 @@ export const fetchOrders = async (options: any) => {
     rowsPerPage: limit = 5,
     // sortProducts: sortBy = "",
   } = options || {};
-  try {
-    const { data } = await axios.get(`/orders?page=${page}&limit=${limit}`);
-    return data;
-  } catch (error) {
-    console.log(error);
-  }
+  const { data } = await axios.get(`/orders?page=${page}&limit=${limit}`);
+  return data;
 };
 
 export const useGetOrders = (options: any) => {

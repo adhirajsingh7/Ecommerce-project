@@ -1,3 +1,6 @@
+import Settings from "@mui/icons-material/Settings";
+import Logout from "@mui/icons-material/Logout";
+
 export const category_options = [
   {
     label: "Food and Beverage",
@@ -55,6 +58,8 @@ export const productTableColumns = [
   "Stock",
   "Action",
 ];
+
+export const userTableColumns = ["", "Name", "Status", "Created at", "Action"];
 
 export const orderTableColumns = [
   "Order id",

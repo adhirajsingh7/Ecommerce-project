@@ -5,54 +5,76 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import SettingsIcon from "@mui/icons-material/Settings";
+import shoppingIcon from "@/assets/icons/shopping-icon.svg";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import { useNavigate } from "react-router-dom";
-import { Avatar, Badge, Button, Stack, Tooltip } from "@mui/material";
-import shoppingIcon from "../../assets/icons/shopping-icon.svg";
-import axios from "axios";
-import { toast } from "react-toastify";
+import {
+  Avatar,
+  Badge,
+  Button,
+  ListItemIcon,
+  Stack,
+  Tooltip,
+} from "@mui/material";
 import { useUserStore } from "@/store/store";
+import { useLogoutUser } from "@/features/auth/api/logout";
+import Settings from "@mui/icons-material/Settings";
+import Logout from "@mui/icons-material/Logout";
+
+const settingsMenu = [
+  {
+    label: "Dashboard",
+    slug: "dashboard",
+    icon: <Settings fontSize="small" />,
+  },
+  { label: "Logout", slug: "login", icon: <Logout fontSize="small" /> },
+];
 
 export const NavbarComponent = (props: any) => {
   const { userCart } = props;
+  const navigate = useNavigate();
   const [quantity, setQuantity] = useState(0);
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const isLoggedIn = useUserStore((state) => state.isLoggedIn);
   const user = useUserStore((state) => state.user);
-  // console.log(user);
-  console.log(userCart);
+  
+  const { mutate: logOutUser } = useLogoutUser();
+
   useEffect(() => {
     let total_quantity = 0;
-    userCart.products.forEach(
-      (product: any) => (total_quantity += product.quantity)
-    );
+    userCart &&
+      userCart.products.forEach(
+        (product: any) => (total_quantity += product.quantity)
+      );
     setQuantity(total_quantity);
   }, [userCart]);
 
-  const handleLogOut = async () => {
-    try {
-      const res = await axios.post("/logout");
-      console.log(res);
-      toast.success("Logged out successfully!");
-      navigate("/login");
-    } catch (error) {
-      console.log(error);
-    }
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
   };
 
-  const navigate = useNavigate();
+  const handleMenuNavigation = (menuItem: any) => {
+    handleCloseUserMenu();
+    if (menuItem.label === "Logout") logOutUser();
+    navigate(`/${menuItem.slug}`);
+  };
+
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
   const handleHomeNavigation = () => {
     navigate("/");
   };
   const handleCartNavigation = () => {
     navigate("/cart");
   };
-  const handleSettingsNavigation = () => {
-    navigate("/dashboard");
-  };
   const handleProductsNavigation = () => {
     navigate("/products");
   };
-  const handleProfileNavigation = () => {
-    navigate("/dashboard/account");
+  const handleLoginNavigation = () => {
+    navigate("/login");
   };
 
   return (
@@ -85,31 +107,61 @@ export const NavbarComponent = (props: any) => {
                   View products
                 </Button>
               </Tooltip>
-              <Tooltip title="Cart">
-                <IconButton onClick={handleCartNavigation}>
-                  <Badge color="secondary" badgeContent={quantity} max={10}>
-                    <ShoppingCartIcon sx={{ color: "white" }} />
-                  </Badge>
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Settings">
-                <IconButton onClick={handleSettingsNavigation}>
-                  <SettingsIcon sx={{ color: "white" }} />
-                </IconButton>
-              </Tooltip>
-              {user && (
-                <Tooltip title={user?.full_name}>
-                  <Avatar
-                    alt={user?.full_name}
-                    src={user?.avatar}
-                    onClick={handleProfileNavigation}
-                    sx={{ "&:hover": { cursor: "pointer" } }}
-                  />
-                </Tooltip>
+              {!isLoggedIn && (
+                <Button variant="contained" onClick={handleLoginNavigation}>
+                  Log in
+                </Button>
               )}
-              <Button variant="contained" onClick={handleLogOut}>
-                Log out
-              </Button>
+              {isLoggedIn && (
+                <>
+                  <Tooltip title="Cart">
+                    <IconButton onClick={handleCartNavigation}>
+                      <Badge color="secondary" badgeContent={quantity} max={10}>
+                        <ShoppingCartIcon sx={{ color: "white" }} />
+                      </Badge>
+                    </IconButton>
+                  </Tooltip>
+                  <Box>
+                    <Tooltip title="Open settings">
+                      <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                        <Avatar
+                          alt={user?.full_name}
+                          src={user?.avatar}
+                          sx={{ "&:hover": { cursor: "pointer" } }}
+                        />
+                      </IconButton>
+                    </Tooltip>
+                    <Menu
+                      sx={{ mt: "45px" }}
+                      id="menu-appbar"
+                      anchorEl={anchorElUser}
+                      anchorOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                      }}
+                      keepMounted
+                      transformOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                      }}
+                      open={Boolean(anchorElUser)}
+                      onClose={handleCloseUserMenu}
+                    >
+                      {settingsMenu.map((setting) => (
+                        <MenuItem
+                          key={setting.label}
+                          onClick={() => handleMenuNavigation(setting)}
+                        >
+                          <ListItemIcon>{setting.icon}</ListItemIcon>
+                          <Typography textAlign="center">
+                            {setting.label}
+                          </Typography>
+                        </MenuItem>
+                      ))}
+                    </Menu>
+                  </Box>
+                </>
+              )}
             </Stack>
           </Toolbar>
         </AppBar>

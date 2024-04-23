@@ -2,13 +2,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import axios from "axios";
 
-export const addProductToCart = async (product: any) => {
-  try {
-    const { data } = await axios.post("/cart", product);
-    return data;
-  } catch (error) {
-    console.log(error);
-  }
+export const addProductToCart = (product: any) => {
+  return axios.post("/cart", product);
 };
 
 export const useAddToCart = () => {

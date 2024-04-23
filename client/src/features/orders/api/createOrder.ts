@@ -1,15 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import axios from "axios";
 
-export const createOrder = async (order: any) => {
-  try {
-    const response = await axios.post(`/orders/`, order);
-    return response?.data;
-  } catch (error) {
-    console.log(error);
-  }
+export const createOrder = (order: any) => {
+  return axios.post(`/orders/`, order);
 };
 
 export const useCreateOrder = () => {

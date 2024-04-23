@@ -1,12 +1,16 @@
 interface IUserProfile {
-  _id?: string;
-  avatar?: string;
+  _id: string;
   username: string;
   email: string;
-  password: string;
+  password?: string;
   full_name: string;
-  created_at?: string;
-  updated_at?: string;
+  avatar: string;
+  mobile: string | number;
+  role: "admin" | "user" | "merchant";
+  status: "active" | "inactive";
+  created_at: Date;
+  updated_at: Date;
+  __v: number;
 }
 
 interface IProduct {
@@ -38,5 +42,5 @@ interface IAddress {
   locality: string;
   flat_no: string;
   landmark?: string;
-  address_type: "home" | "work" | "other";
+  address_type: home | work | other;
 }

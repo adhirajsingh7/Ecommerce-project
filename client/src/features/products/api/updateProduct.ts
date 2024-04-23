@@ -13,13 +13,7 @@ export const updateProduct = async (productId: string, product: any) => {
   if (product.image) formData.append("image", product.image[0] || "");
 
   for (let data of formData) console.log(data);
-
-  try {
-    const { data } = await axios.put(`/products/${productId}`, formData);
-    return data;
-  } catch (error) {
-    console.log(error);
-  }
+  return axios.put(`/products/${productId}`, formData);
 };
 
 export const useUpdateProduct = (productId: string, closeModal) => {

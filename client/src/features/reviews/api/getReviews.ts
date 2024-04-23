@@ -9,15 +9,10 @@ type TReviewsFilter = {
 
 export const fetchReviews = async (options: TReviewsFilter) => {
   const { page = 0, rowsPerPage: limit = 10, productId = "" } = options || {};
-
-  try {
-    const { data } = await axios.get(
-      `/reviews?page=${page}&limit=${limit}&product_id=${productId}`
-    );
-    return data;
-  } catch (error) {
-    console.log(error);
-  }
+  const { data } = await axios.get(
+    `/reviews?page=${page}&limit=${limit}&product_id=${productId}`
+  );
+  return data;
 };
 
 export const useGetReviews = (options: TReviewsFilter) => {

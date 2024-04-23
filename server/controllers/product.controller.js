@@ -14,7 +14,6 @@ exports.get_products = async (req, res, next) => {
   } = req.query;
   page = parseInt(page) || 0;
   limit = parseInt(limit) || 10;
-  console.log(req.isAuthenticated());
 
   let offset = page * limit;
   let criteria = {};

@@ -54,12 +54,12 @@ export const DashboardSidebar = () => {
   ];
   return (
     <>
-      <Stack direction="column" sx={{ width: 1 / 5 }}>
+      <Stack direction="column" sx={{ minWidth: 1 / 5 }}>
         <Typography variant="h5">Settings</Typography>
         <List>
           {dashboard_sidebar_options.map((item, index) => {
             return (
-              item.roles.includes(user.role) && (
+              item.roles.includes(user?.role) && (
                 <React.Fragment key={index}>
                   <NavLink
                     style={{ textDecoration: "none" }}

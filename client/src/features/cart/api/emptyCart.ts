@@ -1,13 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
-export const EmptyCart = async (cartId: string) => {
-  try {
-    const { data } = await axios.delete(`/cart/${cartId}`);
-    return data;
-  } catch (error) {
-    console.log(error);
-  }
+export const EmptyCart = (cartId: string) => {
+  return axios.delete(`/cart/${cartId}`);
 };
 
 export const useEmptyCart = (cartId: string) => {

@@ -7,14 +7,13 @@ type ProtectedRouteProps = PropsWithChildren;
 
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const navigate = useNavigate();
-  const user = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
 
-  const { isPending, data: userData } = useGetUser();
-
+  const { isLoading, data: userData } = useGetUser();
+  // console.log(userData)
   useEffect(() => {
     setUser(userData?.data?.user);
   }, [userData]);
 
-  return !isPending && children;
+  return !isLoading && children;
 };

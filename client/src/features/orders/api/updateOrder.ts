@@ -2,13 +2,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-export const updateOrder = async (orderId: string, order: any) => {
-  try {
-    const { data } = await axios.put(`/orders/${orderId}`, order);
-    return data;
-  } catch (error) {
-    console.log(error);
-  }
+export const updateOrder = (orderId: string, order: any) => {
+  return axios.put(`/orders/${orderId}`, order);
 };
 
 export const useUpdateOrder = () => {

@@ -74,7 +74,13 @@ const OrdersPage = () => {
                       {row._id}
                     </TableCell>
                     <TableCell align="left">
-                      <Chip color="warning" label={row.status} />
+                      <Chip
+                        label={row.status}
+                        sx={{
+                          bgcolor:
+                            row?.status === "cancelled" ? "#C51220" : "#ff8829",
+                        }}
+                      />
                     </TableCell>
                     <TableCell align="left">${row.total_amount}</TableCell>
                     <TableCell align="left">

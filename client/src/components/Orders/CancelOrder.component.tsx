@@ -43,6 +43,7 @@ export const CancelOrder = (props: any) => {
       DeleteButton={<DeleteButton />}
       handleDelete={handleDelete}
       handleClose={handleClose}
+      isPending={isPending}
     />
   );
 };

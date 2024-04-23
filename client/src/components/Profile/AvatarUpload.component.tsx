@@ -1,11 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
-import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import { useDropzone } from "react-dropzone";
-import { updateUser } from "../../api/user.api";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+import { useUpdateUser } from "@/features/users/api/updateUser";
+import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import "./AvatarUpload.styles.scss";
 
 const baseStyle = {
@@ -26,30 +24,13 @@ const rejectStyle = {
 
 export const AvatarUploadComponent = (props: any) => {
   const { avatar: userAvatar, _id: userId } = props;
-  const queryClient = useQueryClient();
+  const [files, setFiles] = useState<any>([]);
 
-  const { isPending, isError, error, mutate } = useMutation({
-    throwOnError: true,
-    mutationFn: (user) => updateUser(userId, user),
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["users"] });
-      console.log(data);
-      toast.success("Avatar updated successfully!");
-    },
-    onError: (error) => {
-      // Handle the error here
-      console.error("An error occurred:", error);
-    },
-  });
-
-  if (isError) {
-    console.log("REACY QUERY ERROR : ", error);
-  }
+  const { isPending, mutate } = useUpdateUser({ userId });
 
   useEffect(() => {
     setFiles([{ preview: userAvatar }]);
   }, []);
-  const [files, setFiles] = useState<any>([]);
 
   const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } =
     useDropzone({

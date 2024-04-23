@@ -3,41 +3,12 @@ import { Button, Stack, Typography } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoadingButton } from "@mui/lab";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateUser } from "../../api/user.api";
 import { TPasswordChangeSchema, passwordChangeSchema } from "@/lib/type";
 import { FormInputText } from "@/components/Form";
-import { toast } from "react-toastify";
+import { useUpdateUser } from "@/features/users/api/updateUser";
 
 export const ChangePasswordComponent = (props: any) => {
   const { userId } = props;
-  const queryClient = useQueryClient();
-
-  const { isPending, isError, error, mutate } = useMutation({
-    throwOnError: true,
-    mutationFn: (user) => updateUser(userId, user),
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["users"] });
-      console.log(data);
-      if (data.code === "ERR_BAD_REQUEST") {
-        // console.error("data : ", data.response.data.message);
-        setError("password", {
-          type: "server",
-          message: data.response.data.message,
-        });
-      } else {
-        toast.success("Password updated successfully!");
-      }
-    },
-    onError: (error) => {
-      // Handle the error here
-      console.error("An error occurred:", error);
-    },
-  });
-
-  if (isError) {
-    console.log("REACY QUERY ERROR : ", error);
-  }
 
   const defaultValues = {
     password: "",
@@ -56,6 +27,8 @@ export const ChangePasswordComponent = (props: any) => {
     defaultValues,
     resolver: zodResolver(passwordChangeSchema),
   });
+
+  const { isPending, mutate } = useUpdateUser({ userId, setError });
 
   const onSubmit: SubmitHandler<any> = async (data) => {
     console.log(data);

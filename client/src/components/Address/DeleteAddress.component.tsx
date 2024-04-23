@@ -7,7 +7,7 @@ export const DeleteAddress = (props: any) => {
   const { addressId } = props;
   const [open, setOpen] = React.useState(false);
 
-  const { mutate: deleteAddressMutation } = useDeleteAddress();
+  const { isPending, mutate: deleteAddressMutation } = useDeleteAddress();
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -39,6 +39,7 @@ export const DeleteAddress = (props: any) => {
       DeleteButton={<DeleteButton />}
       handleDelete={handleDelete}
       handleClose={handleClose}
+      isPending={isPending}
     />
   );
 };

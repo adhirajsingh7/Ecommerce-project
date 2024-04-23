@@ -4,12 +4,8 @@ import axios from "axios";
 type TProductId = string | undefined;
 
 export const fetchProductById = async (productId: TProductId) => {
-  try {
-    const { data } = await axios.get(`/products/${productId}`);
-    return data;
-  } catch (error) {
-    console.log(error);
-  }
+  const { data } = await axios.get(`/products/${productId}`);
+  return data;
 };
 
 export const useGetProductById = (productId: TProductId) => {

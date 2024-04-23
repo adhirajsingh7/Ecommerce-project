@@ -5,11 +5,13 @@ import { ReviewStatsComponent } from "./ReviewStats.component";
 import { CreateReviewComponent } from "./CreateReview.component";
 import { ReviewCard } from "./ReviewCard.component";
 import { useGetReviews } from "@/features/reviews/api/getReviews";
+import { useUserStore } from "@/store/store";
 
 export const ReviewsComponent = () => {
   const [page, setPage] = React.useState(0);
   const rowsPerPage = 2;
   const params = useParams();
+  const isLoggedIn = useUserStore((state) => state.isLoggedIn);
   const productId = params?.product_id || "";
 
   const { isPending, data: reviewsList } = useGetReviews({
@@ -23,7 +25,6 @@ export const ReviewsComponent = () => {
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value - 1);
   };
-
   return (
     <>
       <Stack direction="row" justifyContent="space-around">
@@ -40,7 +41,7 @@ export const ReviewsComponent = () => {
             sx={{ width: 1 / 2 }}
           >
             <Typography variant="h4">Reviews</Typography>
-            <CreateReviewComponent />
+            {isLoggedIn && <CreateReviewComponent />}
           </Stack>
           {reviewsList?.data?.map((review: any, index: number) => (
             <ReviewCard key={index} {...review} />

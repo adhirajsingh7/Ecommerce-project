@@ -1,19 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 import { toast } from "react-toastify";
+import axios from "axios";
 
-export const createReview = async (productId: string, review: IReview) => {
-  try {
-    const response = await axios.post(`/reviews/${productId}`, review);
-    return response?.data;
-  } catch (error) {
-    console.log(error);
-  }
+export const createReview = (productId: string, review: IReview) => {
+  return axios.post(`/reviews/${productId}`, review);
 };
 
 export const useCreateReview = (options: any) => {
   const { productId, closeModal } = options;
-
   const queryClient = useQueryClient();
 
   return useMutation({

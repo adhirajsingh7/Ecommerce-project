@@ -1,17 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 import { toast } from "react-toastify";
+import axios from "axios";
 
-export const updateAddress = async (
-  addressId: string | undefined,
-  address: any
-) => {
-  try {
-    const { data } = await axios.put(`/addresses/${addressId}`, address);
-    return data;
-  } catch (error) {
-    console.log(error);
-  }
+export const updateAddress = (addressId: string | undefined, address: any) => {
+  return axios.put(`/addresses/${addressId}`, address);
 };
 
 export const useUpdateAddress = (addressId: string | undefined) => {

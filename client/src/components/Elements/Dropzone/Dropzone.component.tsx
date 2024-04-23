@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import React, { useEffect, useMemo } from "react";
+import { Box, Stack, Typography } from "@mui/material";
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import { useDropzone } from "react-dropzone";
 import "./Dropzone.styles.scss";
@@ -20,7 +20,14 @@ const rejectStyle = {
   borderColor: "#ff1744",
 };
 
-export const DropzoneComponent = (props: any) => {
+interface DropzonePropType {
+  displayImage?: string;
+  displayImageClassName: string;
+  files: any[];
+  setFiles: (image: any) => void;
+}
+
+export const DropzoneComponent = (props: DropzonePropType) => {
   const { displayImage, displayImageClassName, files, setFiles } = props;
 
   useEffect(() => {
@@ -71,8 +78,6 @@ export const DropzoneComponent = (props: any) => {
       }}
     />
   ));
-
-
 
   return (
     <Stack

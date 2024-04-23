@@ -1,42 +1,14 @@
 import React, { useEffect } from "react";
 import { Button, Stack, Typography } from "@mui/material";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TpersonalInfoSchema, personalInfoSchema } from "@/lib/type";
-import { updateUser } from "../../api/user.api";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoadingButton } from "@mui/lab";
 import { FormInputText } from "@/components/Form";
-import { toast } from "react-toastify";
+import { useUpdateUser } from "@/features/users/api/updateUser";
 
 export const PersonalDetailsComponent = (props: any) => {
   const { username, full_name, email, mobile, _id: userId } = props;
-  const queryClient = useQueryClient();
-
-  const { isPending, isError, error, mutate } = useMutation({
-    throwOnError: true,
-    mutationFn: (user) => updateUser(userId, user),
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["users"] });
-      console.log(data);
-      if (data.code === "ERR_BAD_REQUEST") {
-        // console.error("data : ", data.response.data.message);
-        // setError("password", {
-        //   type: "server",
-        //   message: data.response.data.message,
-        // });
-      }
-      toast.success("Profile updated successfully!");
-    },
-    onError: (error) => {
-      // Handle the error here
-      console.error("An error occurred:", error);
-    },
-  });
-
-  if (isError) {
-    console.log("REACY QUERY ERROR : ", error);
-  }
 
   let defaultValues = {
     username,
@@ -66,6 +38,8 @@ export const PersonalDetailsComponent = (props: any) => {
     defaultValues,
     resolver: zodResolver(personalInfoSchema),
   });
+
+  const { isPending, mutate } = useUpdateUser({ userId, setError });
 
   const onSubmit: SubmitHandler<any> = async (data) => {
     console.log(data);
