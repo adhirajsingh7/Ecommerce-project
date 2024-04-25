@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import { Box, Divider, Paper, Stack, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { LoadingButton } from "@mui/lab";
@@ -11,11 +11,14 @@ import { useUserStore } from "@/store/store";
 import googleIcon from "@/assets/icons/google_icon.svg";
 
 const LoginPage = () => {
+  const [loading, setLoading] = useState(false);
   const setIsLoggedIn = useUserStore((state) => state.setIsLoggedIn);
+
   const { isPending, mutate } = useLoginUser();
 
   const googleAuth = () => {
     window.open("http://localhost:8080/login/federated/google", "_self");
+    setLoading(true);
     setIsLoggedIn(true);
   };
 
@@ -34,10 +37,8 @@ const LoginPage = () => {
   });
 
   const onSubmit: SubmitHandler<any> = async (data) => {
-    // console.log(data);
     mutate(data);
   };
-  if (isPending) return <div>Loading...</div>;
 
   return (
     <Box
@@ -86,13 +87,12 @@ const LoginPage = () => {
                 loadingPosition="center"
                 variant="contained"
                 sx={{
+                  height: "52px",
                   background:
                     "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
                   border: 0,
-                  borderRadius: 50,
+                  borderRadius: 10,
                   boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
-                  color: "white",
-                  p: 2,
                 }}
               >
                 <span>Login</span>
@@ -100,24 +100,20 @@ const LoginPage = () => {
             </Stack>
           </form>
           <Divider>OR</Divider>
-          <Stack
-            direction="row"
-            justifyContent="center"
-            alignItems="center"
-            gap={2}
-            sx={{
-              borderRadius: 50,
-              width: 1,
-              p: 1,
-              "&:hover": { cursor: "pointer" },
-            }}
-            component={Paper}
-            elevation={2}
+          <LoadingButton
+            startIcon={
+              <img src={googleIcon} alt="" width="40px" height="40px" />
+            }
+            type="submit"
+            loading={loading}
+            loadingPosition="center"
+            variant="outlined"
+            color="inherit"
+            sx={{ borderColor: "#dee0e3", borderRadius: 10 }}
             onClick={googleAuth}
           >
-            <img src={googleIcon} alt="" width="50px" height="50px" />
-            <Typography variant="h6">Login with google</Typography>
-          </Stack>
+            <span>Login with google</span>
+          </LoadingButton>
           <Typography variant="body1" textAlign="center">
             Don't have any account?{" "}
             <Link to="/signup">

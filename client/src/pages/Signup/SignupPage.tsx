@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useSignupUser } from "@/features/auth/api/signup";
 import { DropzoneComponent } from "@/components/Elements/Dropzone";
 import LoadingButton from "@mui/lab/LoadingButton";
+import { FormInputPassword } from "@/components/Form/FormInputPassword";
 
 const SignupPage = () => {
   const [files, setFiles] = useState<any>([]);
@@ -113,19 +114,25 @@ const SignupPage = () => {
                 options={role_options}
                 error={errors.role}
               />
+              <FormInputPassword
+                type="text"
+                name={"full_name"}
+                control={control}
+                label={"Full name"}
+              />
+
               <LoadingButton
                 type="submit"
                 loading={isPending}
                 loadingPosition="center"
                 variant="contained"
                 sx={{
+                  height: "52px",
                   background:
                     "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
                   border: 0,
-                  borderRadius: 50,
+                  borderRadius: 10,
                   boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
-                  color: "white",
-                  p: 2,
                 }}
               >
                 <span>Signup</span>

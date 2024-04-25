@@ -104,9 +104,9 @@ const ProductsPage = () => {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                   />
                 ) : (
-                  <Typography sx={{ p: 2 }} variant="h4" textAlign="center">
-                    No Products found
-                  </Typography>
+                  <Stack sx={{ height: "calc(100vh - 209px)" }} justifyContent="center">
+                    <Typography variant="h4">No Products found</Typography>
+                  </Stack>
                 )}
               </Stack>
             </>
