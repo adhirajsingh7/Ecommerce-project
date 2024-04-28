@@ -59,6 +59,7 @@ export const ChangeMerchantStatus = (props: any) => {
           {merchantStatus.map((status) => (
             <MenuItem
               key={status.label}
+              disabled={status.value === userStatus}
               onClick={() => handleMenuNavigation(status.value)}
             >
               <Typography textAlign="center">{status.label}</Typography>

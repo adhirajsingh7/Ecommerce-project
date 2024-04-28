@@ -15,8 +15,8 @@ import HomeIcon from "@mui/icons-material/Home";
 import SellIcon from "@mui/icons-material/Sell";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
-import "./DashboardSidebar.styles.scss";
 import { useUserStore } from "@/store/store";
+import "./DashboardSidebar.styles.scss";
 
 export const DashboardSidebar = () => {
   const user = useUserStore((state) => state.user);

@@ -1,6 +1,6 @@
 import React from "react";
 import { ModalComponent } from "@/components/Elements/Modal";
-import { Button } from "@mui/material";
+import { Button, Stack } from "@mui/material";
 import { ProductForm } from "./ProductForm.component";
 
 export const CreateProduct = (props: any) => {
@@ -11,9 +11,11 @@ export const CreateProduct = (props: any) => {
 
   const ModalButton = () => {
     return (
-      <Button variant="contained" onClick={handleOpen}>
-        Add Product
-      </Button>
+      <Stack justifyContent="center" alignItems="center">
+        <Button variant="contained" onClick={handleOpen}>
+          Add Product
+        </Button>
+      </Stack>
     );
   };
 

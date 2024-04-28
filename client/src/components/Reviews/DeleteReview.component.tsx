@@ -1,22 +1,19 @@
-import { ConfirmationDialog } from "@/components/Elements/ConfirmationDialog";
-import { useUpdateOrder } from "@/features/orders/api/updateOrder";
-import { IconButton } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
 import React, { useState } from "react";
+import { ConfirmationDialog } from "@/components/Elements/ConfirmationDialog";
+import { IconButton } from "@mui/material";
 import { useDeleteReview } from "@/features/reviews/api/deleteReview";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export const DeleteReview = (props: any) => {
-  const { reviewId } = props;
+  const { reviewId, setPage } = props;
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const { isPending, mutate: deleteReviewMutation } =
-    useDeleteReview(handleClose);
+  const deleteReview = useDeleteReview({ handleClose, setPage });
 
   const handleDelete = () => {
-    deleteReviewMutation(reviewId);
-    handleClose();
+    deleteReview.mutate(reviewId);
   };
 
   const DeleteButton = () => {
@@ -37,7 +34,7 @@ export const DeleteReview = (props: any) => {
       DeleteButton={<DeleteButton />}
       handleDelete={handleDelete}
       handleClose={handleClose}
-      isPending={isPending}
+      isPending={deleteReview.isPending}
     />
   );
 };

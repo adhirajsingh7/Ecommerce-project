@@ -1,15 +1,21 @@
 import React from "react";
-import { InputAdornment, TextField } from "@mui/material";
+import { IconButton, InputAdornment, TextField } from "@mui/material";
 import { Controller } from "react-hook-form";
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 export const FormInputPassword = (props: FormTextFieldProps) => {
-  const { name, control, label, type, size = "small" } = props;
+  const { name, control, label, size = "small" } = props;
 
   const [showPassword, setShowPassword] = React.useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+  };
 
   return (
     <Controller
@@ -21,7 +27,7 @@ export const FormInputPassword = (props: FormTextFieldProps) => {
         formState,
       }) => (
         <TextField
-          type={type}
+          type={showPassword ? "text" : "password"}
           helperText={error ? error.message : null}
           size={size}
           error={!!error}
@@ -30,10 +36,17 @@ export const FormInputPassword = (props: FormTextFieldProps) => {
           fullWidth
           label={label}
           variant="outlined"
-          inputProps={{
+          InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <Visibility />
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
               </InputAdornment>
             ),
           }}

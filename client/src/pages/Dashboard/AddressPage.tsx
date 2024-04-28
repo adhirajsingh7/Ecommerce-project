@@ -6,7 +6,7 @@ import { useGetAddresses } from "@/features/address/api/getAddresses";
 
 const AddressPage = () => {
   const { isPending, data: addressList } = useGetAddresses();
-  // console.log(addressList);
+  console.log(addressList);
 
   if (isPending) {
     return (
@@ -18,15 +18,20 @@ const AddressPage = () => {
 
   return (
     <Stack direction="column" sx={{ p: 2, width: 1, overflow: "auto" }} gap={2}>
-      <Typography variant="h5">AddressPage</Typography>
+      <Typography variant="h5">Addresses</Typography>
       <Stack direction="row" justifyContent="flex-end" sx={{ width: 1 }}>
         <CreateAddress />
       </Stack>
       <Stack direction="row" gap={4}>
-        {Array.isArray(addressList?.data) &&
-          addressList.data.map((address: any) => (
+        {addressList?.data.length > 0 ? (
+          addressList?.data.map((address: any) => (
             <AddressCardComponent key={address._id} address={address} />
-          ))}
+          ))
+        ) : (
+          <Typography variant="h5" textAlign="center" width={1}>
+            No addresses found
+          </Typography>
+        )}
       </Stack>
     </Stack>
   );

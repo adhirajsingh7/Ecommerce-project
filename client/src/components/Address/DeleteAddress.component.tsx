@@ -6,15 +6,15 @@ import React from "react";
 export const DeleteAddress = (props: any) => {
   const { addressId } = props;
   const [open, setOpen] = React.useState(false);
-
-  const { isPending, mutate: deleteAddressMutation } = useDeleteAddress();
-
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const { isPending, mutate: deleteAddressMutation } = useDeleteAddress({
+    handleClose,
+  });
+
   const handleDelete = () => {
     deleteAddressMutation(addressId);
-    handleClose();
   };
 
   const DeleteButton = () => {

@@ -7,6 +7,7 @@ type TUserId = string;
 type TUpdateUserOptions = {
   userId: TUserId;
   setError?: any;
+  reset?: () => void;
 };
 
 export const updateUser = (userId: string, user: any) => {
@@ -29,13 +30,14 @@ export const updateUser = (userId: string, user: any) => {
 };
 
 export const useUpdateUser = (options: TUpdateUserOptions) => {
-  const { userId, setError } = options;
+  const { userId, setError, reset } = options;
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (updatedUser) => updateUser(userId, updatedUser),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
+      if (reset) reset();
       toast.success("User updated successfully!");
     },
     onError: (error) => {

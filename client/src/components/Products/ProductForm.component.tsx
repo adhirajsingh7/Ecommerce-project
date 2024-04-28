@@ -1,5 +1,5 @@
-import { Box, Stack, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { Stack, Typography } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoadingButton } from "@mui/lab";
@@ -14,29 +14,9 @@ export const ProductForm = (props: any) => {
   const { product, closeModal, setSearch, setPage } = props;
   const [files, setFiles] = useState<any>([]);
   const productId = product?._id;
-  // console.log(product);
-  // console.log(files);
 
-  const { isPending, mutate: createProductMutation } = useCreateProduct(
-    setSearch,
-    setPage,
-    closeModal
-  );
-  const { isPending: isUpdatePending, mutate: updateProductMutation } =
-    useUpdateProduct(productId, closeModal);
-
-  const defaultValues = {
-    name: "",
-    description: "",
-    price: "",
-    stock: "",
-    category: "",
-    image: "",
-  };
-
-  useEffect(() => {
-    reset(product);
-  }, [product]);
+  const createProduct = useCreateProduct(setSearch, setPage, closeModal);
+  const updateProduct = useUpdateProduct(productId, closeModal);
 
   const {
     register,
@@ -46,7 +26,16 @@ export const ProductForm = (props: any) => {
     reset,
     formState: { errors },
   } = useForm<TProductSchema>({
-    defaultValues,
+    defaultValues: product
+      ? product
+      : {
+          name: "",
+          description: "",
+          price: "",
+          stock: "",
+          category: "",
+          image: "",
+        },
     resolver: zodResolver(productSchema),
   });
 
@@ -55,11 +44,10 @@ export const ProductForm = (props: any) => {
       console.log("Image changed");
       data.image = files;
     }
-    console.log(data);
     if (product) {
-      updateProductMutation(data);
+      updateProduct.mutate(data);
     } else {
-      createProductMutation(data);
+      createProduct.mutate(data);
     }
   };
 
@@ -67,7 +55,7 @@ export const ProductForm = (props: any) => {
     <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
       <Stack direction="column" gap={2} sx={{ width: "800px" }}>
         <Typography variant="h4">
-          {product ? "Edit Product" : "Create Product"}
+          {product ? "Edit Product" : "Add Product"}
         </Typography>
         <Stack direction="row" justifyContent="space-between">
           <Typography variant="h6">Product Image</Typography>
@@ -111,11 +99,11 @@ export const ProductForm = (props: any) => {
         />
         <LoadingButton
           type="submit"
-          loading={isPending || isUpdatePending}
+          loading={createProduct.isPending || updateProduct.isPending}
           loadingPosition="center"
           variant="contained"
         >
-          <span>{product ? "Edit product" : "Create product"}</span>
+          <span>{product ? "Edit product" : "Add product"}</span>
         </LoadingButton>
       </Stack>
     </form>

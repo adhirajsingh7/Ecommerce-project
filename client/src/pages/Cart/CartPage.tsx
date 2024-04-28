@@ -66,12 +66,12 @@ const CartPage = () => {
   return (
     <Box sx={{ height: "calc(100vh - 64px)", width: 1 }}>
       <Typography variant="h4" textAlign="center" sx={{ p: 2 }}>
-        CartPage
+        Cart
       </Typography>
       {userCart?.products.length > 0 ? (
         <>
           <Stack direction="row" justifyContent="flex-end" sx={{ mr: 4 }}>
-            <Button variant="contained" onClick={handleEmptyCart}>
+            <Button color="secondary" variant="contained" onClick={handleEmptyCart}>
               Empty cart
             </Button>
           </Stack>
@@ -96,7 +96,7 @@ const CartPage = () => {
                     onClick={() => handleProductNavigation(product.product._id)}
                   >
                     <img
-                      src={product.product.image}
+                      src={product.product?.image}
                       alt=""
                       style={{
                         height: "100px",
@@ -108,10 +108,10 @@ const CartPage = () => {
                   </Box>
                   <Stack direction="column" gap={2} alignItems="flex-start">
                     <Typography variant="h5" fontWeight={600}>
-                      {product.product.name}
+                      {product.product?.name}
                     </Typography>
                     <Chip
-                      label={product.product.category}
+                      label={product.product?.category}
                       color="success"
                       sx={{ width: "fit-content" }}
                     />
@@ -136,7 +136,7 @@ const CartPage = () => {
                         <AddIcon />
                       </IconButton>
                       <Typography variant="body1" fontWeight={600}>
-                        {product.quantity}
+                        {product?.quantity}
                       </Typography>
                       <IconButton
                         size="small"
@@ -155,7 +155,7 @@ const CartPage = () => {
                     <Typography>Price</Typography>
 
                     <Typography variant="body1" fontWeight={600}>
-                      ${product.quantity * product.product.price}
+                      ${product?.quantity * product.product?.price}
                     </Typography>
                   </Stack>
 
@@ -178,7 +178,7 @@ const CartPage = () => {
           alignItems="center"
           sx={{ height: "calc(100vh - 64px - 72px)" }}
         >
-          <Typography variant="h4">No products found</Typography>
+          <Typography variant="h4">No item in cart</Typography>
         </Stack>
       )}
     </Box>

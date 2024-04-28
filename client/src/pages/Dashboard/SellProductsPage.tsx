@@ -19,11 +19,11 @@ import { CreateProduct, UpdateProduct } from "@/components/Products";
 import { useGetProducts } from "@/features/products/api/getProducts";
 import { productTableColumns } from "@/lib/constants";
 import { useDeleteProduct } from "@/features/products/api/deleteProduct";
+import { SearchComponent } from "@/components/Elements/Search";
 import useDebounce from "@/hooks/useDebounce";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
-import { SearchComponent } from "@/components/Elements/Search";
 
 const SellProductsPage = () => {
   const [deletingProductId, setDeletingProductId] = useState<string | null>(

@@ -14,8 +14,8 @@ export const useCreateReview = (options: any) => {
     mutationFn: (review: IReview) => createReview(productId, review),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["reviews"] });
-      toast.success("Review created successfully!");
       closeModal();
+      toast.success("Review created successfully!");
     },
   });
 };

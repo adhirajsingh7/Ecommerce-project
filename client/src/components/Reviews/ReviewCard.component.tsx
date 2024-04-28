@@ -2,9 +2,11 @@ import React from "react";
 import { Avatar, Box, Paper, Rating, Stack, Typography } from "@mui/material";
 import { useUserStore } from "@/store/store";
 import { DeleteReview } from "./DeleteReview.component";
+import { UpdateReview } from "./UpdateReview.component";
 
 export const ReviewCard = (props: any) => {
-  const { _id: reviewId, title, content, rating, user_id, created_at } = props;
+  const { review, setPage } = props;
+  const { _id: reviewId, title, content, rating, user_id, created_at } = review;
   const user = useUserStore((state) => state.user);
 
   return (
@@ -34,7 +36,10 @@ export const ReviewCard = (props: any) => {
             {title}
           </Typography>
           {user && user?._id === user_id?._id ? (
-            <DeleteReview reviewId={reviewId} />
+            <Stack direction="row">
+              <UpdateReview {...review} />
+              <DeleteReview reviewId={reviewId} setPage={setPage} />
+            </Stack>
           ) : null}
         </Stack>
         <Box

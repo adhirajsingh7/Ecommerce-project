@@ -145,9 +145,11 @@ const MerchantsPage = () => {
                   </TableRow>
                 ))
               ) : (
-                <TableCell align="center" colSpan={6}>
-                  No data found
-                </TableCell>
+                <TableRow>
+                  <TableCell align="center" colSpan={5}>
+                    No data found
+                  </TableCell>
+                </TableRow>
               )}
             </TableBody>
           </Table>

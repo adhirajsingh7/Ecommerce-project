@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Divider, Paper, Stack, Typography } from "@mui/material";
+import { Divider, Paper, Stack, Typography } from "@mui/material";
 import { UpdateAddress } from "./UpdateAddress.component";
 import { DeleteAddress } from "./DeleteAddress.component";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";

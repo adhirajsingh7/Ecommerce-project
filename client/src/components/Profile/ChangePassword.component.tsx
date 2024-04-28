@@ -28,7 +28,7 @@ export const ChangePasswordComponent = (props: any) => {
     resolver: zodResolver(passwordChangeSchema),
   });
 
-  const { isPending, mutate } = useUpdateUser({ userId, setError });
+  const { isPending, mutate } = useUpdateUser({ userId, setError, reset });
 
   const onSubmit: SubmitHandler<any> = async (data) => {
     console.log(data);

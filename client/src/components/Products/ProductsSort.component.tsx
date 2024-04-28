@@ -18,25 +18,25 @@ export const ProductsSortComponent = (props: any) => {
   };
   return (
     <>
-      <Stack direction="row" justifyContent="flex-end" alignItems="center">
+      <Stack direction="row" alignItems="center" gap={1}>
         <Typography variant="body2">Sort by</Typography>
+        <Box sx={{ minWidth: 120 }}>
+          <FormControl fullWidth>
+            <Select
+              size="small"
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={sortProducts}
+              onChange={handleChange}
+            >
+              <MenuItem value={"relevance"}>Relevance</MenuItem>
+              <MenuItem value={"newest"}>What's New</MenuItem>
+              <MenuItem value={"price_high"}>Price (highest first)</MenuItem>
+              <MenuItem value={"price_low"}>Price (lowest first)</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
       </Stack>
-      <Box sx={{ minWidth: 120 }}>
-        <FormControl fullWidth>
-          <Select
-            size="small"
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={sortProducts}
-            onChange={handleChange}
-          >
-            <MenuItem value={"relevance"}>Relevance</MenuItem>
-            <MenuItem value={"newest"}>What's New</MenuItem>
-            <MenuItem value={"price_high"}>Price (highest first)</MenuItem>
-            <MenuItem value={"price_low"}>Price (lowest first)</MenuItem>
-          </Select>
-        </FormControl>
-      </Box>
     </>
   );
 };

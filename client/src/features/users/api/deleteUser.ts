@@ -13,8 +13,8 @@ export const useDeleteUser = (closeModal) => {
     mutationFn: (userId: string) => deleteUser(userId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
-      toast.success("User deleted successfully!");
       closeModal();
+      toast.success("User deleted successfully!");
     },
   });
 };

@@ -9,8 +9,8 @@ import { TSignUpSchema, signUpSchema } from "@/lib/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSignupUser } from "@/features/auth/api/signup";
 import { DropzoneComponent } from "@/components/Elements/Dropzone";
-import LoadingButton from "@mui/lab/LoadingButton";
 import { FormInputPassword } from "@/components/Form/FormInputPassword";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 const SignupPage = () => {
   const [files, setFiles] = useState<any>([]);
@@ -88,13 +88,11 @@ const SignupPage = () => {
                 control={control}
                 label={"Email"}
               />
-              <FormInputText
-                type="password"
+              <FormInputPassword
                 name={"password"}
                 control={control}
                 label={"Password"}
               />
-
               <FormInputText
                 type="text"
                 name={"full_name"}
@@ -114,13 +112,6 @@ const SignupPage = () => {
                 options={role_options}
                 error={errors.role}
               />
-              <FormInputPassword
-                type="text"
-                name={"full_name"}
-                control={control}
-                label={"Full name"}
-              />
-
               <LoadingButton
                 type="submit"
                 loading={isPending}

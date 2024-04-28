@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Chip, Stack, TablePagination, Typography } from "@mui/material";
 import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 import Table from "@mui/material/Table";
@@ -10,11 +10,11 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useGetOrders } from "@/features/orders/api/getOrders";
 import { orderTableColumns } from "@/lib/constants";
-import { CancelOrder, ViewOrder } from "@/components/Orders";
+import { CancelOrder, DeleteOrder, ViewOrder } from "@/components/Orders";
 
 const OrdersPage = () => {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const { isPending, data: ordersList } = useGetOrders({
     page,
@@ -87,6 +87,9 @@ const OrdersPage = () => {
                       <ViewOrder order={row} />
                       {row.status !== "cancelled" && (
                         <CancelOrder orderId={row._id} />
+                      )}
+                      {row.status === "cancelled" && (
+                        <DeleteOrder orderId={row._id} />
                       )}
                     </TableCell>
                   </TableRow>

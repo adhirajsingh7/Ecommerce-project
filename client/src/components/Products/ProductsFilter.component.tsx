@@ -49,13 +49,19 @@ export const ProductsFilterComponent = (props: any) => {
           <FormGroup>
             <FormControlLabel
               control={
-                <Checkbox checked={food} onChange={handleChange} name="food" />
+                <Checkbox
+                  color="secondary"
+                  checked={food}
+                  onChange={handleChange}
+                  name="food"
+                />
               }
               label="Food and Beverage"
             />
             <FormControlLabel
               control={
                 <Checkbox
+                  color="secondary"
                   checked={electronics}
                   onChange={handleChange}
                   name="electronics"
@@ -66,6 +72,7 @@ export const ProductsFilterComponent = (props: any) => {
             <FormControlLabel
               control={
                 <Checkbox
+                  color="secondary"
                   checked={furniture}
                   onChange={handleChange}
                   name="furniture"
@@ -76,6 +83,7 @@ export const ProductsFilterComponent = (props: any) => {
             <FormControlLabel
               control={
                 <Checkbox
+                  color="secondary"
                   checked={clothing}
                   onChange={handleChange}
                   name="clothing"

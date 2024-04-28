@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Box, Button, FormHelperText, Stack, Typography } from "@mui/material";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,25 +16,13 @@ interface propTypes {
 
 export const AddressFormComponent = (props: propTypes) => {
   const { address, closeModal } = props;
-  console.log(address);
 
-  const { isPending, mutate: createAddressMutation } = useCreateAddress();
+  const { isPending, mutate: createAddressMutation } = useCreateAddress({
+    closeModal,
+  });
 
   const { isPending: isUpdatePending, mutate: updateAddressMutation } =
-    useUpdateAddress(address?._id);
-
-  const defaultValues = {
-    name: "",
-    phone: "",
-    pincode: "",
-    city: "",
-    state: "",
-    country: "",
-    locality: "",
-    flat_no: "",
-    landmark: "",
-    address_type: "home",
-  };
+    useUpdateAddress({ addressId: address?._id, closeModal });
 
   const {
     register,
@@ -44,25 +32,29 @@ export const AddressFormComponent = (props: propTypes) => {
     reset,
     formState: { errors },
   } = useForm<TAddressSchema>({
-    defaultValues,
+    defaultValues: address
+      ? address
+      : {
+          name: "",
+          phone: "",
+          pincode: "",
+          city: "",
+          state: "",
+          country: "",
+          locality: "",
+          flat_no: "",
+          landmark: "",
+          address_type: "home",
+        },
     resolver: zodResolver(addressSchema),
   });
 
-  useEffect(() => {
-    if (address) {
-      reset(address);
-    }
-  }, [address, reset]);
-
   const onSubmit: SubmitHandler<any> = async (data) => {
-    console.log(data);
     if (address) {
       updateAddressMutation(data);
     } else {
       createAddressMutation(data);
     }
-    reset();
-    closeModal();
   };
 
   return (

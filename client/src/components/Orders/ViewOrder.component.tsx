@@ -1,6 +1,6 @@
 import React from "react";
 import { ModalComponent } from "@/components/Elements/Modal";
-import { Box, Button, IconButton, Stack, Typography } from "@mui/material";
+import { IconButton, Stack, Tooltip, Typography } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
 export const ViewOrder = (props: any) => {
@@ -11,9 +11,11 @@ export const ViewOrder = (props: any) => {
 
   const ModalButton = () => {
     return (
-      <IconButton onClick={handleOpen}>
-        <VisibilityIcon />
-      </IconButton>
+      <Tooltip title="View">
+        <IconButton onClick={handleOpen}>
+          <VisibilityIcon />
+        </IconButton>
+      </Tooltip>
     );
   };
 

@@ -1,20 +1,28 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
+import { TReviewSchema } from "@/lib/type";
 import { toast } from "react-toastify";
+import axios from "axios";
 
-export const updateReview = (reviewId: string, review: any) => {
+type TReviewOptions = {
+  reviewId: string;
+  closeModal: () => void;
+};
+
+export const updateReview = (reviewId: string, review: TReviewSchema) => {
   return axios.put(`/reviews/${reviewId}`, review);
 };
 
-export const useUpdateReview = (reviewId, updatedReview, closeModal) => {
+export const useUpdateReview = (options: TReviewOptions) => {
+  const { reviewId, closeModal } = options;
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (review: IReview) => updateReview(reviewId, updatedReview),
+    mutationFn: (updatedReview: TReviewSchema) =>
+      updateReview(reviewId, updatedReview),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["reviews"] });
-      toast.success("Review updated successfully!");
       closeModal();
+      toast.success("Review updated successfully!");
     },
   });
 };

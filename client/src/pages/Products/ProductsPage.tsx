@@ -1,6 +1,11 @@
 import React, { useState } from "react";
-import { Divider, Stack, TablePagination, Typography } from "@mui/material";
-import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
+import {
+  Divider,
+  Skeleton,
+  Stack,
+  TablePagination,
+  Typography,
+} from "@mui/material";
 import { useGetProducts } from "@/features/products/api/getProducts";
 import {
   ProductCard,
@@ -8,6 +13,7 @@ import {
   ProductsSortComponent,
 } from "@/components/Products";
 import { SearchComponent } from "@/components/Elements/Search";
+import { ProductsLoading } from "@/components/Loading/ProductsLoading.component";
 import useDebounce from "@/hooks/useDebounce";
 
 const ProductsPage = () => {
@@ -78,12 +84,28 @@ const ProductsPage = () => {
             py: 1,
           }}
         >
-          <Stack direction="row" justifyContent="flex-end" gap={2}>
-            <ProductsSortComponent
-              sortProducts={sortProducts}
-              setSortProducts={setSortProducts}
-              setPage={setPage}
-            />
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            gap={2}
+          >
+            <Typography variant="body2" fontWeight={600}>
+              {isPending ? (
+                <Skeleton width="100px" />
+              ) : (
+                productsList?.data.total + " Items Found"
+              )}
+            </Typography>
+            {isPending ? (
+              <Skeleton variant="rectangular" width="180px" height="40px" />
+            ) : (
+              <ProductsSortComponent
+                sortProducts={sortProducts}
+                setSortProducts={setSortProducts}
+                setPage={setPage}
+              />
+            )}
           </Stack>
           {!isPending ? (
             <>
@@ -104,21 +126,17 @@ const ProductsPage = () => {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                   />
                 ) : (
-                  <Stack sx={{ height: "calc(100vh - 209px)" }} justifyContent="center">
-                    <Typography variant="h4">No Products found</Typography>
+                  <Stack
+                    sx={{ height: "calc(100vh - 209px)" }}
+                    justifyContent="center"
+                  >
+                    <Typography variant="h4">No products found</Typography>
                   </Stack>
                 )}
               </Stack>
             </>
           ) : (
-            <Stack
-              sx={{ height: 1 }}
-              direction="row"
-              justifyContent="center"
-              alignItems="center"
-            >
-              <ClimbingBoxLoader color="#FE6D87" size={25} />
-            </Stack>
+            <ProductsLoading />
           )}
         </Stack>
       </Stack>

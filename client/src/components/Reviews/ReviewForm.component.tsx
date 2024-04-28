@@ -8,23 +8,15 @@ import { FormRating } from "../Form/FormRating";
 import { useParams } from "react-router-dom";
 import { useCreateReview } from "@/features/reviews/api/createReview";
 import { TReviewSchema, reviewSchema } from "@/lib/type";
+import { useUpdateReview } from "@/features/reviews/api/updateReview";
 
 export const ReviewFormComponent = (props: any) => {
-  const { closeModal } = props;
-
+  const { closeModal, review } = props;
   const params = useParams();
   const productId = params?.product_id || "";
 
-  const { isPending, mutate: createReviewMutation } = useCreateReview({
-    productId,
-    closeModal,
-  });
-
-  const defaultValues = {
-    title: "",
-    content: "",
-    rating: 3,
-  };
+  const createReview = useCreateReview({ productId, closeModal });
+  const updateReview = useUpdateReview({ reviewId: review?._id, closeModal });
 
   const {
     register,
@@ -34,19 +26,32 @@ export const ReviewFormComponent = (props: any) => {
     reset,
     formState: { errors },
   } = useForm<TReviewSchema>({
-    defaultValues,
+    defaultValues: review
+      ? review
+      : {
+          title: "",
+          content: "",
+          rating: 3,
+        },
     resolver: zodResolver(reviewSchema),
   });
 
   const onSubmit: SubmitHandler<any> = async (data) => {
-    console.log(data);
-    createReviewMutation(data);
+    if (review) {
+      updateReview.mutate(data);
+    } else {
+      createReview.mutate(data);
+    }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Stack direction="column" gap={2} sx={{ width: "400px" }}>
-        <Typography variant="h4">Write a review</Typography>
+        <Stack direction="row" justifyContent="space-between">
+          <Typography variant="h5" fontWeight={600}>
+            {review ? "Edit review" : "Write a review"}
+          </Typography>
+        </Stack>
         <FormInputText
           type="text"
           name={"title"}
@@ -62,17 +67,17 @@ export const ReviewFormComponent = (props: any) => {
           rows={4}
         />
         <FormRating name={"rating"} control={control} />
-        <Stack direction="row" justifyContent="space-between" sx={{ mt: 2 }}>
+        <Stack direction="row" justifyContent="flex-end" sx={{ mt: 2 }} gap={2}>
           <Button variant="outlined" onClick={() => closeModal()}>
             Cancel
           </Button>
           <LoadingButton
             type="submit"
-            loading={isPending}
+            loading={createReview.isPending || updateReview.isPending}
             loadingPosition="center"
             variant="contained"
           >
-            Create review
+            Post
           </LoadingButton>
         </Stack>
       </Stack>

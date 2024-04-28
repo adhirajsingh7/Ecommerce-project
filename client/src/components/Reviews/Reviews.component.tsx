@@ -1,5 +1,5 @@
-import React from "react";
-import { CircularProgress, Pagination, Stack, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { Pagination, Stack, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { ReviewStatsComponent } from "./ReviewStats.component";
 import { CreateReviewComponent } from "./CreateReview.component";
@@ -8,19 +8,17 @@ import { useGetReviews } from "@/features/reviews/api/getReviews";
 import { useUserStore } from "@/store/store";
 
 export const ReviewsComponent = () => {
-  const [page, setPage] = React.useState(0);
+  const [page, setPage] = useState(0);
   const rowsPerPage = 2;
   const params = useParams();
   const isLoggedIn = useUserStore((state) => state.isLoggedIn);
   const productId = params?.product_id || "";
 
-  const { isPending, data: reviewsList } = useGetReviews({
+  const { data: reviewsList } = useGetReviews({
     page,
     rowsPerPage,
     productId,
   });
-
-  if (isPending) return <CircularProgress />;
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value - 1);
@@ -44,7 +42,7 @@ export const ReviewsComponent = () => {
             {isLoggedIn && <CreateReviewComponent />}
           </Stack>
           {reviewsList?.data?.map((review: any, index: number) => (
-            <ReviewCard key={index} {...review} />
+            <ReviewCard key={index} review={review} setPage={setPage} />
           ))}
           <Stack direction="row" justifyContent="center" sx={{ p: 4 }}>
             {reviewsList?.data?.length !== 0 ? (
