@@ -38,7 +38,13 @@ This project is crafted with a scalable, maintainable codebase and adheres to th
 
 ## Screenshots
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+<img width="1440" alt="Screenshot 2024-04-28 at 12 32 34 PM" src="https://github.com/adhirajsingh7/Ecommerce-project/assets/93936555/f0fb119a-186a-43e1-a174-488cc97df705">
+<img width="1440" alt="Screenshot 2024-04-28 at 12 40 41 PM" src="https://github.com/adhirajsingh7/Ecommerce-project/assets/93936555/1a760538-0f05-40a6-86a7-cdf71c2285c9">
+
+<img width="1440" alt="Screenshot 2024-04-28 at 12 41 14 PM" src="https://github.com/adhirajsingh7/Ecommerce-project/assets/93936555/cae181bf-72ef-4107-8ad1-021b4b0cf588">
+
+<img width="1440" alt="Screenshot 2024-04-28 at 12 43 09 PM" src="https://github.com/adhirajsingh7/Ecommerce-project/assets/93936555/f2c5823f-2a68-4d22-870d-cfb7eff94603">
+<img width="1440" alt="Screenshot 2024-04-28 at 12 49 09 PM" src="https://github.com/adhirajsingh7/Ecommerce-project/assets/93936555/372ec82c-50a8-4d7f-bf18-6a19c3320bed">
 
 ## Environment Variables
 
