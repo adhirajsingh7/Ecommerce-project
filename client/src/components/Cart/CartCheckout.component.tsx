@@ -16,7 +16,7 @@ export const CartCheckoutComponent = (props: any) => {
     <Stack
       direction="column"
       gap={4}
-      sx={{ p: 4, width: 1 / 4 }}
+      sx={{ p: 4, width: 1 / 4, height: "350px" }}
       component={Paper}
     >
       <Stack direction="column" gap={2}>
